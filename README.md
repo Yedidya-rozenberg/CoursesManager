@@ -17,7 +17,14 @@ In addition, the project actually states the design pattern state in the course 
 Download or clone the Github code from: https://github.com/Yedidya-rozenberg/CoursesManager
 _ Running the Demo: _
 In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it to full demo data to database. Comment the 19 line ( FullDatabase();) , recommend 20 line ( Display.LogginScreen();), and run again.
-You can choose to connect as a teacher or as a student. The list of usernames and passwords appears in program class, in the FullDatabase static method.
+**Sample connection:
+teacher:**
+Username cc
+Password c3c3c3
+**student:**
+Username c3
+Password c3c3c3
+If you want, you can find details of other users in the "FullDatabase" method in the program file
 # 4.	Entities, Relations design and logic:
 The project implements EF TPT (Table-per-Type) inheritance model. Table-per-type inheritance uses a separate table in the database to maintain data for non-inherited properties and key properties for each type in the inheritance hierarchy.
 Users
