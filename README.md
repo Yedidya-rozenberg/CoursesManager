@@ -18,12 +18,13 @@ Download or clone the Github code from: https://github.com/Yedidya-rozenberg/Cou
 _ Running the Demo: _
 In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it to full demo data to database. Comment the 19 line ( FullDatabase();) , recommend 20 line ( Display.LogginScreen();), and run again.
 You can choose to connect as a teacher or as a student. The list of usernames and passwords appears in program class, in the FullDatabase static method.
-4.	Entities, Relations design and logic:
+# 4.	Entities, Relations design and logic:
 The project implements EF TPT (Table-per-Type) inheritance model. Table-per-type inheritance uses a separate table in the database to maintain data for non-inherited properties and key properties for each type in the inheritance hierarchy.
 Users
 The first table of users includes only a username, password and one-to-one link to the table with the rest of the details - so that additional security can be created for this table.
 
   public class UserLoggin
+  
     {
         [Key]
         public int UserID { get; set; }
@@ -44,6 +45,7 @@ The first table of users includes only a username, password and one-to-one link 
 There are two types of users - teacher and user. I was debating whether to produce one class that both would inherit from, and in the end I decided to create them as two different classes, in order to make the demo more reliable.
 
   public class Student //:UserDetiles
+  
     {
         [Key]
         public int StudentID { get; set; }
@@ -65,6 +67,7 @@ There are two types of users - teacher and user. I was debating whether to produ
     }
     
   public class Teacher //: UserDetiles
+  
     {
         [Key]
         public int TeacherID { get; set; }
@@ -89,11 +92,14 @@ There are two types of users - teacher and user. I was debating whether to produ
 The main object of the project is a course - which includes a link to the teacher, students, and teaching units that it includes - which include the study material and questions about the material.
 
   public class Cours
+  
     {
         [Key]
         public int CoursID { get; set; }
+        
         [Required]
         public string CoursName { get; set; }
+        
         [Required]
         public char CuorsStatus { get; set; }
 
@@ -107,7 +113,8 @@ The main object of the project is a course - which includes a link to the teache
     }
     
 public class Unit
-    {
+
+    {    
         [Key]
         public int UnitID { get; set; }
         [ForeignKey("Cours")]
@@ -124,7 +131,9 @@ public class Unit
 In addition to that, I created a class request that is designed to document and approve critical actions like activating and canceling a course, enrolling and canceling a course registration.
 
    public class Request
+   
     {
+    
         public Request()
         {
             this.RequestTime = DateTime.Now;
