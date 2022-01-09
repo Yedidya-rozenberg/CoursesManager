@@ -9,10 +9,10 @@ namespace CoursesManager.Logic
 {
     public interface IMainScreen
     {
-        T MyDetiles<T>(UserLoggin user);
-        List<Cours> MyCourses(UserLoggin user);
-        List<Cours> Allcourses();
-        Cours viewCours(int coursID);
+        T MyDetails<T>(userLogin user);
+        List<Course> MyCourses(userLogin user);
+        List<Course> AllCourses();
+        Course viewCourse(int CourseID);
     }
     public interface IUnitScreen
     {
@@ -20,7 +20,7 @@ namespace CoursesManager.Logic
         string GetQuestions();
         void BackUnit();
         void NextUnit();
-        void BackToCours();
+        void BackToCourse();
         void ConnectAsTeacher();
     }
     public  interface ITeacherUnitScreen : IUnitScreen
@@ -29,9 +29,9 @@ namespace CoursesManager.Logic
         bool UpdatStudy();
         bool UpdatQuestions();
     }
-    public interface ILogginScreen
+    public interface ILoginScreen
     {
-        bool ChackLoggin();//מבקש שם משתמש וסיסמא. ובודק מול הטבלה. אם מצליח  מחזיר חיובי מזיר את המשתמש למשתנה סטטי. אם לא, שלילי.
+        bool CheckLogin();//מבקש שם משתמש וסיסמא. ובודק מול הטבלה. אם מצליח  מחזיר חיובי מזיר את המשתמש למשתנה סטטי. אם לא, שלילי.
                            //   bool NewUser();// מבקש פרטים ורושם אותם בבסיס הנתונים
     }
 }

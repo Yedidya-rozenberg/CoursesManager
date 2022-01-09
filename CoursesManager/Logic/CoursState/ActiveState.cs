@@ -6,47 +6,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoursesManager.Logic.CoursState
+namespace CoursesManager.Logic.CourseState
 {
-    public class ActiveState : ICoursState
+    public class ActiveState : ICourseState
     {
-        private Cours cours;
+        private Course course;
         private Teacher teacher;
-        public ActiveState(Cours cours, Teacher teacher)
+        public ActiveState(Course course, Teacher teacher)
         {
-            this.cours = cours;
+            this.Course = course;
             this.teacher = teacher;
         }
 
-        public ICoursState Editing()
+        public ICourseState Editing()
         {
-            if (cours.TeacherID == teacher.TeacherID)
+            if (Course.TeacherID == teacher.TeacherID)
             {
                 Console.WriteLine("You move to Edit mode");
-                return new EditState(cours, teacher);
+                return new EditState(course, teacher);
             }
             else
             { Console.WriteLine("You do not have permission to edit this course"); return this; }
         }
 
-        public ICoursState Activate()
+        public ICourseState Activate()
         {
-            Console.WriteLine("This cours are active.");
+            Console.WriteLine("This Course is active.");
             return this;
         }
-       public ICoursState Remove()
+       public ICourseState Remove()
         {
-            Console.WriteLine("You can remove cours any in Edit mode");
+            Console.WriteLine("You can remove any course in Edit mode");
             return this;
         }
-        public void OtherOptions(CoursContext coursContext)
+        public void OtherOptions(CourseContext CourseContext)
         {
-            Console.WriteLine("There are no other options available.");        
+            Console.WriteLine("There are no other available options.");        
         }
 
         public void Register()
         {
-            Console.WriteLine("To regisrer connect as a student.");        
+            Console.WriteLine("To register connect as a student.");        
         }
 
         public void EnterUnit(int unitID)

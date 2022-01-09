@@ -14,19 +14,19 @@ namespace CoursesManager.DAL
         private static CoursesDBcontext _dbContext = GetDB.GetInstance();
         private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
 
-        public static bool AddUnit(Unit unit, int CoursID)
+        public static bool AddUnit(Unit unit, int CourseID)
         {
             try
             {
                 rw.EnterReadLock();
-                var cours = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c => c.CoursID == CoursID);
+                var Course = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c => c.CourseID == CourseID);
                 rw.ExitReadLock();
-                if (cours == null)
+                if (Course == null)
                 {
-                    Display.Exeption(new NullReferenceException());
+                    Display.Exception(new NullReferenceException());
                     return false;
                 }
-                cours.Units.Add(unit);
+                Course.Units.Add(unit);
                 rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 rw.ExitWriteLock();
@@ -35,27 +35,27 @@ namespace CoursesManager.DAL
             catch (Exception ex)
             {
 
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }        
         }
 
-        public static bool RemoveUnit(int unitID, int TeacherID, Cours cours)
+        public static bool RemoveUnit(int unitID, int TeacherID, Course Course)
         {
             try
             {
                 rw.EnterReadLock();
-                var _cours = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c=>c==cours);
+                var _Course = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c=>c==Course);
                 var unit = _dbContext.Units.Find(unitID);
                 rw.ExitReadLock();
                 if (unit == null || _cours==null)
                 {
-                    Display.Exeption(new NullReferenceException());
+                    Display.Exception(new NullReferenceException());
                     return false;
                 }
-                if (!(cours.TeacherID == TeacherID && cours.Units.Contains(unit)))
+                if (!(Course.TeacherID == TeacherID && Course.Units.Contains(unit)))
                 {
-                    Display.Exeption(new Exception("Can't do this"));
+                    Display.Exception(new Exception("Can't do this"));
                     return false;
                 }
                 _dbContext.Remove(unit);
@@ -67,7 +67,7 @@ namespace CoursesManager.DAL
             catch (Exception ex)
             {
 
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
         }
@@ -81,7 +81,7 @@ namespace CoursesManager.DAL
                 rw.ExitReadLock();
                 if (_unit == null)
                 {
-                    Display.Exeption(new NullReferenceException());
+                    Display.Exception(new NullReferenceException());
                     return false;
                 }
                 _unit.UnitName = unit.UnitName ?? unit.UnitName;
@@ -95,7 +95,7 @@ namespace CoursesManager.DAL
             catch (Exception ex)
             {
 
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
         }
@@ -109,7 +109,7 @@ namespace CoursesManager.DAL
                 rw.ExitReadLock();
                 if (Unit == null)
                 {
-                    Display.Exeption(new NullReferenceException());
+                    Display.Exception(new NullReferenceException());
                     return null;
                 }
                 return Unit;
@@ -117,7 +117,7 @@ namespace CoursesManager.DAL
             catch (Exception ex)
             {
 
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return null;
             }
         }

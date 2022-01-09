@@ -14,8 +14,8 @@ namespace CoursesManager.Migrations
                     StudentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LestName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhonNumber = table.Column<int>(type: "int", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Payment = table.Column<float>(type: "real", nullable: false)
                 },
@@ -31,10 +31,10 @@ namespace CoursesManager.Migrations
                     TeacherID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LestName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhonNumber = table.Column<int>(type: "int", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Selery = table.Column<float>(type: "real", nullable: false)
+                    Salary = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,15 +45,15 @@ namespace CoursesManager.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CoursID = table.Column<int>(type: "int", nullable: false)
+                    CourseID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CoursName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CuorsStatus = table.Column<string>(type: "nvarchar(1)", nullable: false),
+                    CourseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseStatus = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     TeacherID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CoursID);
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
                     table.ForeignKey(
                         name: "FK_Courses_Teachers_TeacherID",
                         column: x => x.TeacherID,
@@ -91,23 +91,23 @@ namespace CoursesManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CoursStudent",
+                name: "CourseStudent",
                 columns: table => new
                 {
-                    CoursID = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<int>(type: "int", nullable: false),
                     StudentsStudentID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CoursStudent", x => new { x.CoursID, x.StudentsStudentID });
+                    table.PrimaryKey("PK_CourseStudent", x => new { x.CourseID, x.StudentsStudentID });
                     table.ForeignKey(
-                        name: "FK_CoursStudent_Courses_CoursID",
-                        column: x => x.CoursID,
+                        name: "FK_CourseStudent_Courses_CourseID",
+                        column: x => x.CourseID,
                         principalTable: "Courses",
-                        principalColumn: "CoursID",
+                        principalColumn: "CourseID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CoursStudent_Students_StudentsStudentID",
+                        name: "FK_CourseStudent_Students_StudentsStudentID",
                         column: x => x.StudentsStudentID,
                         principalTable: "Students",
                         principalColumn: "StudentID",
@@ -120,11 +120,11 @@ namespace CoursesManager.Migrations
                 {
                     RequestID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CoursID = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<int>(type: "int", nullable: false),
                     StudentID = table.Column<int>(type: "int", nullable: true),
                     TeacherID = table.Column<int>(type: "int", nullable: true),
                     RequestCode = table.Column<string>(type: "nvarchar(1)", nullable: false),
-                    RequestDetiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequestTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RequestStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -132,10 +132,10 @@ namespace CoursesManager.Migrations
                 {
                     table.PrimaryKey("PK_requests", x => x.RequestID);
                     table.ForeignKey(
-                        name: "FK_requests_Courses_CoursID",
-                        column: x => x.CoursID,
+                        name: "FK_requests_Courses_CourseID",
+                        column: x => x.CourseID,
                         principalTable: "Courses",
-                        principalColumn: "CoursID",
+                        principalColumn: "CourseID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_requests_Students_StudentID",
@@ -157,7 +157,7 @@ namespace CoursesManager.Migrations
                 {
                     UnitID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    coursID = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<int>(type: "int", nullable: false),
                     UnitName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudyContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Questions = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -166,10 +166,10 @@ namespace CoursesManager.Migrations
                 {
                     table.PrimaryKey("PK_Units", x => x.UnitID);
                     table.ForeignKey(
-                        name: "FK_Units_Courses_coursID",
-                        column: x => x.coursID,
+                        name: "FK_Units_Courses_CourseID",
+                        column: x => x.CourseID,
                         principalTable: "Courses",
-                        principalColumn: "CoursID",
+                        principalColumn: "CourseID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -179,14 +179,14 @@ namespace CoursesManager.Migrations
                 column: "TeacherID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CoursStudent_StudentsStudentID",
-                table: "CoursStudent",
+                name: "IX_CourseStudent_StudentsStudentID",
+                table: "CourseStudent",
                 column: "StudentsStudentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_requests_CoursID",
+                name: "IX_requests_CourseID",
                 table: "requests",
-                column: "CoursID");
+                column: "CourseID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_requests_StudentID",
@@ -199,9 +199,9 @@ namespace CoursesManager.Migrations
                 column: "TeacherID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Units_coursID",
+                name: "IX_Units_CourseID",
                 table: "Units",
-                column: "coursID");
+                column: "CourseID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_StudentID",
@@ -221,7 +221,7 @@ namespace CoursesManager.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CoursStudent");
+                name: "CourseStudent");
 
             migrationBuilder.DropTable(
                 name: "requests");

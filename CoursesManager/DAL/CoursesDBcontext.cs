@@ -30,13 +30,13 @@ namespace CoursesManager.DAL
         //    }
         //    return instance;
         //}
-        public DbSet<UserLoggin> Users { get; set; }
+        public DbSet<userLogin> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Cours> Courses { get; set; }
+        public DbSet<Course> Courses { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Request> requests { get; set; }
-        //public DbSet<StudentCours> studentCours { get; set; }
+        //public DbSet<StudentCours> studentCourse { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,8 +53,8 @@ namespace CoursesManager.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<UserLoggin>().Property("UserID").UseIdentityColumn(); //.HasKey(nameof(UserLoggin.UserID));
-           // modelBuilder.Entity<StudentCours>().HasKey(nameof(StudentCours.StudentID), nameof(StudentCours.CoursID));
+            //modelBuilder.Entity<userLogin>().Property("UserID").UseIdentityColumn(); //.HasKey(nameof(userLogin.UserID));
+           // modelBuilder.Entity<StudentCours>().HasKey(nameof(StudentCourse.StudentID), nameof(StudentCourse.CourseID));
         }
 
 

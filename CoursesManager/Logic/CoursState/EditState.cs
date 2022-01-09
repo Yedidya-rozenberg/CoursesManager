@@ -6,36 +6,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoursesManager.Logic.CoursState
+namespace CoursesManager.Logic.CourseState
 {
-    public class EditState : ICoursState
+    public class EditState : ICourseState
     {
-        private Cours cours;
+        private Course course;
         private Teacher teacher;
-        public EditState(Cours cours, Teacher teacher)
+        public EditState(Course course, Teacher teacher)
         {
-            this.cours = cours;
+            this.Course = course;
             this.teacher = teacher;
         }
-        public ICoursState Activate()
+        public ICourseState Activate()
         {
             Display.Message("Are you sure you want to active the course? y/n");
             string answer = Console.ReadLine();
             if (answer == "y")
             {// send request
-                var request = new Request(cours.CoursID, 'A', "activat cours", null, teacher.TeacherID);
-                var requsrID = requastAccess.AddRequest(request);
-                string massege = (requsrID == 0) ? "Error. try again" : "Request send.";
+                var request = new Request(Course.CourseID, 'A', "activate course", null, teacher.TeacherID);
+                var requsrID = requestAccess.AddRequest(request);
+                string massege = (requsrID == 0) ? "Error. try again" : "Request was sent.";
                 Display.Message(massege);
                 // Execution Request
                 if ((requsrID != null))
                 {
 
-                    var success = requastAccess.MakeRequest(request);
+                    var success = requestAccess.MakeRequest(request);
                     if (success)
                     {
-                        Console.WriteLine("the transaction completed successfully.");
-                        return new ActiveState(cours, teacher);
+                        Console.WriteLine("the transaction has completed successfully.");
+                        return new ActiveState(course, teacher);
                     }
                     else
                     {
@@ -55,7 +55,7 @@ namespace CoursesManager.Logic.CoursState
             }
         }
 
-        public ICoursState Editing()
+        public ICourseState Editing()
         {
             Console.WriteLine("You are in edit mode.");
             return this;
@@ -66,9 +66,9 @@ namespace CoursesManager.Logic.CoursState
             Display.EditUnitScreen(unitID);
         }
 
-        public void OtherOptions(CoursContext coursContext)
+        public void OtherOptions(CourseContext CourseContext)
         {
-            Display.EditCouursOption(coursContext);
+            Display.EditCouursOption(CourseContext);
         }
 
         public void Register()
@@ -76,25 +76,25 @@ namespace CoursesManager.Logic.CoursState
             Console.WriteLine("You are registered as a lecturer in this course.");
         }
 
-        public ICoursState Remove()
+        public ICourseState Remove()
         {
             Console.WriteLine("Are you sure you want to delete the course? y/n");
             string confirm = Console.ReadLine();
             if (confirm == "y")
             {// send request
-                var request = new Request( cours.CoursID, 'D', "Delete cours", null, teacher.TeacherID);
-                var requsrID = requastAccess.AddRequest(request);
+                var request = new Request( Course.CourseID, 'D', "Delete course", null, teacher.TeacherID);
+                var requsrID = requestAccess.AddRequest(request);
                 string massege = (requsrID == null)? "Error. try again":"Request send.";
                 Display.Message(massege);
                 // Execution Request
                 if ((requsrID != null))
                 {
 
-                    var success = requastAccess.MakeRequest(request);
+                    var success = requestAccess.MakeRequest(request);
                     if (success)
                     {
-                        Console.WriteLine("the transaction completed successfully.");
-                        return new CenceledState(cours, teacher);
+                        Console.WriteLine("the transaction has completed successfully.");
+                        return new CanceledState(course, teacher);
                     }
                     else
                     {

@@ -14,30 +14,30 @@ namespace CoursesManager.DAL
         private static CoursesDBcontext _dbcontext = GetDB.GetInstance();
         static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
 
-        public static bool ViewDediles(int ID, ref Teacher t)
+        public static bool ViewDetails(int ID, ref Teacher t)
         {
             Teacher teacher = new();
             try
             {
                 rw.EnterReadLock();
-                teacher = _dbcontext.Teachers.FirstOrDefault(s => s.userLoggin.UserID == ID);
+                teacher = _dbcontext.Teachers.FirstOrDefault(s => s.userLogin.UserID == ID);
                 rw.ExitReadLock();
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
             }
             if ((teacher == null))
             {
                 return false;
             }
-            teacher.Selery = default(float);
-            teacher.userLoggin = null;
+            teacher.Salary = default(float);
+            teacher.userLogin = null;
             t = teacher;
             return true;
         }
 
-        //public static bool ViewMyTeacherDediles(int TeacherID, ref Teacher teacher)
+        //public static bool ViewMyTeacherDetails(int TeacherID, ref Teacher teacher)
         //{
         //    Teacher T = new();
         //    try
@@ -48,7 +48,7 @@ namespace CoursesManager.DAL
         //    }
         //    catch (Exception ex)
         //    {
-        //        Display.Exeption(ex);
+        //        Display.Exception(ex);
         //    }
         //    if ((T == null))
         //    {
@@ -58,7 +58,7 @@ namespace CoursesManager.DAL
         //    return true;
         //}
 
-        public static bool UpdateDetiles(int TeacherID, Teacher updated)
+        public static bool UpdateDetails(int TeacherID, Teacher updated)
         {
             Teacher teacher = new();
             try
@@ -68,10 +68,10 @@ namespace CoursesManager.DAL
                 rw.ExitReadLock();
 
             teacher.FirstName = (updated.FirstName != "") ? updated.FirstName : teacher.FirstName;
-            teacher.LestName = (updated.LestName != "") ? updated.LestName : teacher.LestName;
+            teacher.LastName = (updated.LastName != "") ? updated.LastName : teacher.LastName;
             teacher.email = (updated.email != "") ? updated.email : teacher.email;
-            teacher.Selery = (updated.Selery != default(float)) ? updated.Selery : teacher.Selery;
-            teacher.PhonNumber = (updated.PhonNumber != default(int)) ? updated.PhonNumber : teacher.PhonNumber;
+            teacher.Salary = (updated.Salary != default(float)) ? updated.Salary : teacher.Salary;
+            teacher.PhoneNumber = (updated.PhoneNumber != default(int)) ? updated.PhoneNumber : teacher.PhoneNumber;
      
                 rw.EnterWriteLock();
                 _dbcontext.Update(teacher);
@@ -81,7 +81,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
 

@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.Models
 {
-    public class Teacher //: UserDetiles
+    public class Teacher //: UserDetails
     {
         [Key]
         public int TeacherID { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
-        public string LestName { get; set; }
+        public string LastName { get; set; }
 
         [Phone]
-        public int PhonNumber { get; set; }
+        public int PhoneNumber { get; set; }
         [EmailAddress]
         public string email { get; set; }
 
-        public UserLoggin userLoggin { get; set; }
+        public userLogin userLogin { get; set; }
 
-        public float Selery { get; set; }
+        public float Salary { get; set; }
 
-        public ICollection<Cours> TeachCours{ get; set; }
+        public ICollection<Course> TeachCourse{ get; set; }
 
     }
 }

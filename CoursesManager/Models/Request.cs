@@ -15,11 +15,11 @@ namespace CoursesManager.Models
             this.RequestTime = DateTime.Now;
             this.RequestStatus = "Open";
         }
-        public Request(int coursID, char requesrCode, string requestDetiles, int? studentID = null, int? teacherID = null)
+        public Request(int CourseID, char requestCode, string requestDetails, int? studentID = null, int? teacherID = null)
         {
-            this.CoursID = coursID;
-            this.RequestCode = requesrCode;
-            this.RequestDetiles = requestDetiles;
+            this.CourseID = CourseID;
+            this.RequestCode = requestCode;
+            this.RequestDetails = requestDetails;
             this.StudentID = studentID;
             this.TeacherID = teacherID;
             this.RequestTime = DateTime.Now;
@@ -27,9 +27,9 @@ namespace CoursesManager.Models
         }
         [Key]
         public int RequestID { get; set; }
-        [ForeignKey("Cours")]
-        public int CoursID { get; set; }
-        public Cours Cours { get; set; }
+        [ForeignKey("Course")]
+        public int CourseID { get; set; }
+        public Course Course { get; set; }
 
         [ForeignKey("Student")]
         public int? StudentID { get; set; }
@@ -41,7 +41,7 @@ namespace CoursesManager.Models
         [Required]
         public char RequestCode { get; set; }
         [Required]
-        public string RequestDetiles { get; set; }
+        public string RequestDetails { get; set; }
         [Required]
         public DateTime RequestTime { get; set; }
         [Required]

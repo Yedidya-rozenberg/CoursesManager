@@ -9,23 +9,23 @@ using System.Threading.Tasks;
 namespace CoursesManager.Models
 {
   
-    //abstract class UserDetiles
+    //abstract class UserDetails
     //{
-    //    [ForeignKey("userLoggin")]
-    //    public int UserDetilesID { get; set; }
+    //    [ForeignKey("userLogin")]
+    //    public int UserDetailsID { get; set; }
     //    [Required]
     //    public string FirstName { get; set; }
     //    [Required]
-    //    public string LestName { get; set; }
+    //    public string LastName { get; set; }
     //    [Required]
     //    public char UserStatus { get; set; }
     //    [Phone]
-    //    public int PhonNumber { get; set; }
+    //    public int PhoneNumber { get; set; }
     //    [EmailAddress]
     //    public string email { get; set; }
      
-    //    virtual public UserLoggin userLoggin { get; set; }
+    //    virtual public userLogin userLogin { get; set; }
 
-    //    public ICollection<Cours> StudyCuorses { get; set; }
+    //    public ICollection<Course> StudyCuorses { get; set; }
     //}
 }

@@ -5,54 +5,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoursesManager.Logic.CoursState
+namespace CoursesManager.Logic.CourseState
 {
-    public class CenceledState : ICoursState
+    public class CanceledState : ICourseState
     {
-        private Cours cours;
+        private Course course;
         private Teacher teacher;
-        public CenceledState(Cours cours, Teacher teacher)
+        public CanceledState(Course course, Teacher teacher)
         {
-            this.cours = cours;
+            this.Course = course;
             this.teacher = teacher;
         }
-        public ICoursState Editing()
+        public ICourseState Editing()
         {
-            if (cours.Teacher == teacher)
+            if (Course.Teacher == teacher)
             {
                 Console.WriteLine("You move to Edit mode");
-                return new EditState(cours, teacher);
+                return new EditState(course, teacher);
             }
             else
             { Console.WriteLine("You do not have permission to edit this course"); return this; }
         }
 
-        public ICoursState Activate()
+        public ICourseState Activate()
         {
-            Console.WriteLine("this cours cenceled. If you want to run it, edit it beforehand. ");
+            Console.WriteLine("this Course canceled. If you want to run it, edit it beforehand. ");
             return this;
         }
 
-        public ICoursState Remove()
+        public ICourseState Remove()
         {
-            Console.WriteLine("This cours hed been deleted.");
+            Console.WriteLine("This Course hed been deleted.");
             return this;
         }
 
         public void EnterUnit(int unitID)
         {
-            Console.WriteLine("This cours hed been deleted.");
+            Console.WriteLine("This Course hed been deleted.");
 
         }
 
-        public void OtherOptions(CoursContext coursContext)
+        public void OtherOptions(CourseContext CourseContext)
         {
             Console.WriteLine("There are no other options available.");
         }
 
         public void Register()
         {
-            Console.WriteLine("This cours hed been deleted.");
+            Console.WriteLine("This Course hed been deleted.");
         }
 
 

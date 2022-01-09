@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.Logic
 {
-   public static class LogginLogic //: ILogginScreen
+   public static class LoginLogic //: ILoginScreen
     {
-        public static bool ChackLoggin(string userName, string Password)
+        public static bool CheckLogin(string userName, string Password)
         {
-            UserLoggin user = new() { UserName = userName, Password = Password };
-            user = StudentAccess.ChackUser(user);
+            userLogin user = new() { UserName = userName, Password = Password };
+            user = StudentAccess.CheckUser(user);
             if (user == null)
             { return false; }
             else

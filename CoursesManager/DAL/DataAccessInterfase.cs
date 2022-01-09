@@ -9,26 +9,26 @@ namespace CoursesManager.DAL
 {
     //interface Icours
     //{
-    //    IEnumerable<Cours> VeiwCuorsesListByUser(UserLoggin user);
-    //    IEnumerable<Cours> VeiwOtherCuorsesListByUser(UserLoggin user);
-    //    IEnumerable<Cours> VeiwAllCuorses();
-    //    bool addCours(Cours cours);
-    //    bool UpdateCours(int CoursID, Cours New);
+    //    IEnumerable<Course> ViewCuorsesListByUser(userLogin user);
+    //    IEnumerable<Course> ViewOtherCuorsesListByUser(userLogin user);
+    //    IEnumerable<Course> ViewAllCuorses();
+    //    bool addCourse(Course Course);
+    //    bool UpdateCourse(int CourseID, Course New);
     //}
     //interface Iuser
     //{
-    //    bool ChackUser(UserLoggin user);
-    //    bool AddUser(UserLoggin newUser);
-    //    bool UpdateDetiles(Teacher teacher);
-    //    bool UpdateDetiles(Student student);
-    //    T ViewDediles<T>(int ID);
-    //    T ViewMyDediles<T>(int ID);
-    //    bool AddStudentToCuers(int coursID, int studentID);
-    //    bool RemoveStudentFromCuers(int coursID, int studentID);
+    //    bool CheckUser(userLogin user);
+    //    bool AddUser(userLogin newUser);
+    //    bool UpdateDetails(Teacher teacher);
+    //    bool UpdateDetails(Student student);
+    //    T ViewDetails<T>(int ID);
+    //    T ViewMyDetails<T>(int ID);
+    //    bool AddStudentToCourse(int CourseID, int studentID);
+    //    bool RemoveStudentFromCourse(int CourseID, int studentID);
     //}
     //interface Iunit
     //{
-    //    bool AddUnit(Unit unit, int CoursID);
+    //    bool AddUnit(Unit unit, int CourseID);
     //    bool RemoveUnit(Unit unit);
     //    Unit ViewUnit(int UnitID);
     //    bool UpdateUnit(Unit unit);

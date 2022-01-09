@@ -10,37 +10,37 @@
 //    public static class UserAccess // : Iuser
 //    {
 
-//        public static bool AddStudentToCuers(int coursID, int studentID)
+//        public static bool AddStudentToCourse(int CourseID, int studentID)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static bool ChackUser(UserLoggin user)
+//        public static bool CheckUser(userLogin user)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static bool RemoveStudentFromCuers(int coursID, int studentID)
+//        public static bool RemoveStudentFromCourse(int CourseID, int studentID)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static bool UpdateDetiles(Teacher teacher)
+//        public static bool UpdateDetails(Teacher teacher)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static bool UpdateDetiles(Student student)
+//        public static bool UpdateDetails(Student student)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static T ViewDediles<T>(int ID)
+//        public static T ViewDetails<T>(int ID)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        public static T ViewMyDediles<T>(int ID)
+//        public static T ViewMyDetails<T>(int ID)
 //        {
 //            throw new NotImplementedException();
 //        }

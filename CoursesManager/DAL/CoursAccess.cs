@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.DAL
 {
-   public static class CoursAccess //: Icours
+   public static class CourseAccess //: ICourse 
     {
-        private static CoursesDBcontext _dbContext = GetDB.GetInstance();
-        private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
+        private static CoursesDBContext _dbContext = GetDB.GetInstance();
+        private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim(); // what is slim?
 
-        public static bool addCours(Cours cours)
+        public static bool addCourse(Course course)
         {
             try
             {
                 rw.EnterWriteLock();
-                Cours c = _dbContext.Courses.FirstOrDefault(co=>co.CoursName==cours.CoursName);
+                Course c = _dbContext.Courses.FirstOrDefault(co=>co.CourseName==course.CourseName);
                 rw.ExitWriteLock();
                 if (c != null)
                 {
                     Display.Message("There is a course with the same name.");
                     return false;
                 }
-                _dbContext.Add(cours);
+                _dbContext.Add(course);
                 rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 rw.ExitWriteLock();
@@ -34,44 +34,44 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
 
         }
 
-        public static Cours VeiwCours(int coursID)
+        public static Course ViewCourse(int courseID)
         {
             try
             {
                 rw.EnterWriteLock();
-                Cours c = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c=>c.CoursID==coursID);
+                Course c = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c=>c.CourseID==courseID);
                 rw.ExitWriteLock();
                 return c;
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return null;
             }
 
         }
 
-        public static bool UpdateCoursName(int CoursID, string New)
+        public static bool UpdateCourseName(int CourseID, string New)
         {
             try
             {
                 rw.EnterWriteLock();
-                Cours c = _dbContext.Courses.Find(CoursID);
+                Course c = _dbContext.Courses.Find(CourseID);
                 rw.ExitWriteLock();
                 if (c == null)
                 {
-                    Display.Message("This course not exixst.");
+                    Display.Message("This course does not exist.");
                     return false;
                 }
                 else
                 {
-                    c.CoursName = New;
+                    c.CourseName = New;
                     _dbContext.Update(c);
                     rw.EnterWriteLock();
                     _dbContext.SaveChanges();
@@ -82,12 +82,12 @@ namespace CoursesManager.DAL
             catch (Exception ex)
             {
 
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
         }
 
-        public static IEnumerable<Cours> VeiwAllCuorses()
+        public static IEnumerable<Course> ViewAllCourses()
         {
             try
             {
@@ -98,27 +98,27 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-               Display.Exeption(ex);
+               Display.Exception(ex);
                 return null;
             }
 
         }
 
-        public static IEnumerable<Cours> VeiwCuorsesListByUser(UserLoggin user)
+        public static IEnumerable<Course> ViewCoursesListByUser(userLogin user)
         {
             try
             {
-                var courses = new List<Cours>();
+                var courses = new List<Course>();
                 if (user.StudentID != null)
                 {
                     rw.EnterReadLock();
-                    courses.AddRange(_dbContext.Students.Include(s=>s.Cours).Where(s=>s.StudentID==user.StudentID).Select(s=>s.Cours).FirstOrDefault().ToList());
+                    courses.AddRange(_dbContext.Students.Include(s=>s.Course).Where(s=>s.StudentID==user.StudentID).Select(s=>s.Course).FirstOrDefault().ToList());
                     rw.ExitReadLock();
                 }
                 if (user.TeacherID != null)
                 {
                     rw.EnterReadLock();
-                    courses.AddRange(_dbContext.Teachers.Include(t => t.TeachCours).Where(t => t.TeacherID == user.TeacherID).Select(t => t.TeachCours).FirstOrDefault().ToList());
+                    courses.AddRange(_dbContext.Teachers.Include(t => t.TeachCoursee).Where(t => t.TeacherID == user.TeacherID).Select(t => t.TeachCoursee).FirstOrDefault().ToList());
                     rw.ExitReadLock();
                 }
 
@@ -127,50 +127,50 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return null;
             }
 
         }
 
-        public static IEnumerable<Cours> VeiwOtherCuorsesListByUser(UserLoggin user)
+        public static IEnumerable<Course> ViewOtherCuorsesListByUser(userLogin user)
         {
-            var allCours = VeiwAllCuorses();
-            var userCours = VeiwCuorsesListByUser(user);
-            var otherCours = allCours.Except(userCours);
-            return otherCours;
+            var allCourses = ViewAllCuorses();
+            var userCourse = ViewCuorsesListByUser(user);
+            var otherCourse = allCourses.Except(userCourse);
+            return otherCourse;
         }
 
-        public static bool CheckStudentCours (int StudentID, int CoursID)
+        public static bool CheckStudentCourse(int StudentID, int CourseID)
         {
             try
             {
                 rw.EnterReadLock();
-                var check = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CoursID == CoursID).Students.FirstOrDefault(s => s.StudentID == StudentID);
+                var check = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == CourseID).Students.FirstOrDefault(s => s.StudentID == StudentID);
                 rw.ExitReadLock();
                 return (check != null);
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }        
         }
 
-        //public static bool CheckCoursActive(int CoursID)
+        //public static bool CheckCourseActive(int CourseID)
         //{
         //    try
         //    {
         //        rw.EnterReadLock();
-        //        var check = _dbContext.Courses.Find(CoursID);
+        //        var check = _dbContext.Courses.Find(CourseID);
         //        rw.ExitReadLock();
         //        if (check != null)
-        //        { return (check.CuorsStatus == 'O'); }
+        //        { return (check.CuorseStatus == 'O'); }
         //        return false;
         //    }
         //    catch (Exception ex)
         //    {
-        //        Display.Exeption(ex);
+        //        Display.Exception(ex);
         //        return false;
         //    }
         //}

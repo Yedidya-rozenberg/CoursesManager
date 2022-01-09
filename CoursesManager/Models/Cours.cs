@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.Models
 {
-    public class Cours
+    public class Course
     {
         [Key]
-        public int CoursID { get; set; }
+        public int CourseID { get; set; }
         [Required]
-        public string CoursName { get; set; }
+        public string CourseName { get; set; }
         [Required]
-        public char CuorsStatus { get; set; }
+        public char CourseStatus { get; set; }
 
         [ForeignKey("Teacher")]
         public int TeacherID { get; set; }

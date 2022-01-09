@@ -1,6 +1,6 @@
 ﻿using CoursesManager.DAL;
 using CoursesManager.Logic;
-using CoursesManager.Logic.CoursState;
+using CoursesManager.Logic.CourseState;
 using CoursesManager.Models;
 using System;
 using System.Collections.Generic;
@@ -12,14 +12,14 @@ namespace CoursesManager
 {
     public static class Display
     {
-        public static void CoursScreen(CoursContext coursContext)
+        public static void CoursScreen(CourseContext CourseContext)
         {
             string choice = "";
             while (!(choice == "B"))
             {
-                Display.Message($" Whelcome to {coursContext.cours.CoursName} cours.What do you want to do?");
-                Display.Message("T - view teacer detiles");
-                Display.Message("U - view cours units");
+                Display.Message($" Whelcome to {CourseContext.Course.CourseName} Course.What do you want to do?");
+                Display.Message("T - view teacer Details");
+                Display.Message("U - view Course units");
                 Display.Message("I - enter to unit");
                 Display.Message("R - register");
                 Display.Message("E - edit");
@@ -31,36 +31,36 @@ namespace CoursesManager
                 switch (choice)
                 {
                     case "T":
-                        coursContext.ViewTeacherDetiles();
+                        CourseContext.ViewTeacherDetails();
                         break;
                     case "U":
-                        coursContext.getUnits();
+                        CourseContext.getUnits();
                         break;
                     case "I":
                         int unitID;
                         Display.Message("Enter unit ID");
                         var success = int.TryParse(Console.ReadLine(), out unitID);
                         if (success)
-                        { coursContext.EnterUnit(unitID); }
-                        else { Display.Message("Not a number.Try again."); }
+                        { CourseContext.EnterUnit(unitID); }
+                        else { Display.Message("Not a number. Try again."); }
                         break;
                     case "R":
-                        coursContext.Register();
+                        CourseContext.Register();
                         break;
                     case "E":
-                        coursContext.Editing();
+                        CourseContext.Editing();
                         break;
                     case "M":
-                        coursContext.Remove();
+                        CourseContext.Remove();
                         break;
                     case "A":
-                        coursContext.Activate();
+                        CourseContext.Activate();
                         break;
                     case "O":
-                        coursContext.OtherOptions();
+                        CourseContext.OtherOptions();
                         break;
                     case "B":
-                        Display.Message("You remove to main screen");
+                        Display.Message("You remove to main screen");??
                         break;
                     default:
                         Display.Message("Error. Try again.");
@@ -69,7 +69,7 @@ namespace CoursesManager
             }
         }
 
-        public static void LogginScreen()
+        public static void LoginScreen()
         {
             string choice = "";
             bool enter = false;
@@ -87,7 +87,7 @@ namespace CoursesManager
                         var userName = Console.ReadLine();
                         Display.Message("Enter Password");
                         var passwors = Console.ReadLine();
-                        bool Success = LogginLogic.ChackLoggin(userName, passwors);
+                        bool Success = LoginLogic.CheckLogin(userName, passwors);
                         var messege = Success ? " The connection was successful" : "faild";
                         enter = Success;
                         break;
@@ -104,7 +104,7 @@ namespace CoursesManager
             }
             if (enter == true)
             {
-                var success = StudentAccess.ViewMyDediles(Program.user, ref Program.Student, ref Program.Teacher);
+                var success = StudentAccess.ViewMyDetails(Program.user, ref Program.Student, ref Program.Teacher);
                 if (success)
                 {
                   var name = (Program.Student != null) ? Program.Student.FirstName : Program.Teacher.FirstName;
@@ -127,14 +127,14 @@ namespace CoursesManager
             if (Program.Student != null) { user = 's'; }
             else
             if (Program.Teacher != null) { user = 't'; }
-            else { Display.Message("User undifind. please update youre detiles."); }
+            else { Display.Message("User undefined. please update your Details."); }
 
             string choice = "";
             while (!(choice == "X"))
             {
                 Display.Message("What do you want to do?");
-                Display.Message("V - view my detiles");
-                Display.Message("U - update my detiles");
+                Display.Message("V - view my Details");
+                Display.Message("U - update my Details");
                 Display.Message("C - view my courses");
                 Display.Message("O - view other courses");
                 Display.Message("A - view all courses");
@@ -144,22 +144,22 @@ namespace CoursesManager
                 switch (choice)
                 {
                     case "V":
-                        MainLogic.printMyDetiles();
+                        MainLogic.printMyDetails();
                         break;
                     case "U":
-                        MainLogic.UpdateDetiles(user);
+                        MainLogic.UpdateDetails(user);
                         break;
                     case "C":
                         MainLogic.MyCourses(Program.user);
                         break;
                     case "O":
-                        MainLogic.OtherCours(Program.user);
+                        MainLogic.OtherCourse(Program.user);
                         break;
                     case "A":
-                        MainLogic.Allcourses();
+                        MainLogic.AllCourses();
                         break;
                     case "E":
-                        MainLogic.EnterCours(user);
+                        MainLogic.EnterCourse(user);
                         break;
                     case "X":
                         Display.Message("The program closed.");
@@ -183,7 +183,7 @@ namespace CoursesManager
                 Display.Message("Q - Questions");
                 //Display.Message("N - next unit");
                 //Display.Message("P - previous unit");
-                Display.Message("B - back to cours");
+                Display.Message("B - back to course");
                 choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -200,7 +200,7 @@ namespace CoursesManager
                     //    UnitLogic.BackUnit();
                     //break;
                     case "B":
-                        Display.Message("You move to cours.");
+                        Display.Message("You move to Course.");
                         break;
                     default:
                         Display.Message("Error. try again.");
@@ -220,7 +220,7 @@ namespace CoursesManager
                 Display.Message("L - learn");
                 Display.Message("Q - Questions");
                 Display.Message("E - edit unit");
-                Display.Message("B - back to cours");
+                Display.Message("B - back to course");
                 choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -231,10 +231,10 @@ namespace CoursesManager
                         Display.Message(unit.Questions);
                         break;
                     case "E":
-                        CoursContext.editUnit(unit.UnitID);
+                        CourseContext.editUnit(unit.UnitID);
                         break;
                     case "B":
-                        Display.Message("You move to cours.");
+                        Display.Message("You move to Course.");
                         break;
                     default:
                         Display.Message("Error. try again.");
@@ -244,14 +244,14 @@ namespace CoursesManager
             }
         }
 
-        public static void EditCouursOption(CoursContext coursContext)
+        public static void EditCouursOption(CourseContext CourseContext)
         {
             string choice = "";
             while (choice != "B")
             {
                 Display.Message("Other options");
                 Display.Message("What do you want to do?");
-                Display.Message("N - edit name cours");
+                Display.Message("N - edit name course");
                 Display.Message("A - add unit");
                 Display.Message("R - remove unit");
                 Display.Message("B - back");
@@ -259,17 +259,17 @@ namespace CoursesManager
                 switch (choice)
                 {
                     case "N":
-                        coursContext.UpdateName();
+                        CourseContext.UpdateName();
                         break;
                     case "A":
-                        coursContext.Addunit();
+                        CourseContext.Addunit();
                         break;
                     case "R":
-                        coursContext.getUnits();
-                        coursContext.RemoveUnit();
+                        CourseContext.getUnits();
+                        CourseContext.RemoveUnit();
                         break;
                     case "B":
-                        Display.Message("Return to edit cours.");
+                        Display.Message("Return to edit Course.");
                         break;
                     default:
                         Display.Message("Error. try again.");
@@ -288,25 +288,25 @@ namespace CoursesManager
             if (Message != null)
             { Console.WriteLine(Message); }
             else
-            { Display.Exeption(new NullReferenceException()); }
+            { Display.Exception(new NullReferenceException()); }
         }
 
-        public static void PrintDetiles<T>(T user)
+        public static void PrintDetails<T>(T user)
         {
             var student = user as Student;
             if (student != null)
             {
-                Console.WriteLine($"Student name: {student.FirstName} {student.LestName}\nPhone number: {student.PhonNumber}\nE-mail: {student.email}");
+                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.email}");
             }
             else
             {
                 var teacher = user as Teacher;
                 if (teacher != null)
                 {
-                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LestName}\nPhone number: {teacher.PhonNumber}\nE-mail: {teacher.email}");
+                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.email}");
                 }
                 else
-                { Display.Exeption(new TypeLoadException()); }
+                { Display.Exception(new TypeLoadException()); }
             }
 
 
@@ -314,37 +314,37 @@ namespace CoursesManager
 
         }
 
-        public static void PrintMyDetiles<T>(T user)
+        public static void PrintMyDetails<T>(T user)
         {
             var student = user as Student;
             if (student != null)
             {
-                Console.WriteLine($"Student name: {student.FirstName} {student.LestName}\nPhone number: {student.PhonNumber}\nE-mail: {student.email}\nPayment: {student.Payment}");
+                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.email}\nPayment: {student.Payment}");
             }
             else
             {
                 var teacher = user as Teacher;
                 if (teacher != null)
                 {
-                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LestName}\nPhone number: {teacher.PhonNumber}\nE-mail: {teacher.email}\nSelety: {teacher.Selery}");
+                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.email}\nSelety: {teacher.Salary}");
                 }
                 else
-                { Display.Exeption(new TypeLoadException()); }
+                { Display.Exception(new TypeLoadException()); }
             }
         }
 
-        public static void PrintCourses(IEnumerable<Cours> courses)
+        public static void PrintCourses(IEnumerable<Course> courses)
         {
             if (courses != null)
             {
                 foreach (var item in courses)
                 {
-                    Console.WriteLine($"Cours ID: {item.CoursID}\t Cours name: {item.CoursName}\t Cours status:{item.CuorsStatus}");
+                    Console.WriteLine($"Course ID: {item.CourseID}\t Course name: {item.CourseName}\t Course status:{item.CourseStatus}");
                 }
             }
             else
             {
-                Display.Exeption(new NullReferenceException());
+                Display.Exception(new NullReferenceException());
             }
         }
         public static void PrintRequest(IEnumerable<Request> requests)
@@ -353,12 +353,12 @@ namespace CoursesManager
             {
                 foreach (var item in requests)
                 {
-                    Console.WriteLine($"Cours ID: {item.CoursID}\t Request: {item.RequestDetiles}\tCode:{item.RequestCode}\tRequest time:{item.RequestTime}");
+                    Console.WriteLine($"Course ID: {item.CourseID}\t Request: {item.RequestDetails}\tCode:{item.RequestCode}\tRequest time:{item.RequestTime}");
                 }
             }
             else
             {
-                Display.Exeption(new NullReferenceException());
+                Display.Exception(new NullReferenceException());
             }
         }
     }

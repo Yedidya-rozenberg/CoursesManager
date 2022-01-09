@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.DAL
 {
-    public static class requastAccess //: Irequast
+    public static class requestAccess //: Irequast
     {
         private static CoursesDBcontext _dbContext = GetDB.GetInstance();
         private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
@@ -32,7 +32,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return null;
             }
         }
@@ -47,7 +47,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return null;
             }
 
@@ -58,12 +58,12 @@ namespace CoursesManager.DAL
         //    throw new NotImplementedException();
         //}
 
-        public static bool UpdateRequestStatus(int requesrID, string newStatus)
+        public static bool UpdateRequestStatus(int requestID, string newStatus)
         {
             try
             {
                 rw.EnterReadLock();
-                var request = _dbContext.requests.Find(requesrID);
+                var request = _dbContext.requests.Find(requestID);
                 rw.ExitReadLock();
                 request.RequestStatus = newStatus;
                 rw.EnterWriteLock();
@@ -73,26 +73,26 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }        
         }
 
-        public static bool  MakeRequest(Request request)
+        public static bool MakeRequest(Request request)
         {
             try
             {
                 if (request.RequestID==default(int))
-                { Display.Exeption(new NullReferenceException()); return false; }
+                { Display.Exception(new NullReferenceException()); return false; }
 
                 bool success;
                 switch (request.RequestCode)
                 {
                     case 'A':
-                        success = activeCours(request);
+                        success = activeCourse(request);
                         break;
                     case 'D':
-                        success = DeleteCours(request);
+                        success = DeleteCourse(request);
                         break;
                     case 'G':
                         success = registerStudent(request);
@@ -101,7 +101,7 @@ namespace CoursesManager.DAL
                         success = RemoveStudentFromCourse(request);
                         break;
                     default:
-                        Display.Exeption(new ArgumentException("The request code not match."));
+                        Display.Exception(new ArgumentException("The request code not match."));
                         success = false;
                         break;
                 }
@@ -109,20 +109,20 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
 
         }
 
-        private static bool DeleteCours(Request request)
+        private static bool DeleteCourse(Request request)
         {
             try
             {
                 rw.EnterReadLock();
-                var course = _dbContext.Courses.Find(request.CoursID);
+                var course = _dbContext.Courses.Find(request.CourseID);
                 rw.ExitReadLock();
-                course.CuorsStatus = 'C';
+                course.CourseStatus = 'C';
                 rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 rw.ExitWriteLock();
@@ -130,7 +130,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
         }
@@ -140,7 +140,7 @@ namespace CoursesManager.DAL
             try
             {
                 rw.EnterReadLock();
-                var course = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CoursID == request.CoursID);
+                var course = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == request.CourseID);
                 var student = _dbContext.Students.Find(request.StudentID);
                 rw.ExitReadLock();
                 course.Students.Remove(student);
@@ -151,7 +151,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
         }
@@ -161,7 +161,7 @@ namespace CoursesManager.DAL
             try
             {
                 rw.EnterReadLock();
-                var course = _dbContext.Courses.Include(c=>c.Students).FirstOrDefault(c=>c.CoursID == request.CoursID);
+                var course = _dbContext.Courses.Include(c=>c.Students).FirstOrDefault(c=>c.CourseID == request.CourseID);
                 var student = _dbContext.Students.Find(request.StudentID);
                 rw.ExitReadLock();
                 course.Students.Add(student);
@@ -172,20 +172,20 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
 
         }
 
-        private static bool activeCours(Request request)
+        private static bool activeCourse(Request request)
         {
             try
             {
                 rw.EnterReadLock();
-                var course = _dbContext.Courses.Find(request.CoursID);
+                var course = _dbContext.Courses.Find(request.CourseID);
                 rw.ExitReadLock();
-                course.CuorsStatus = 'O';
+                course.CourseStatus = 'O';
                 rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 rw.ExitWriteLock();
@@ -193,7 +193,7 @@ namespace CoursesManager.DAL
             }
             catch (Exception ex)
             {
-                Display.Exeption(ex);
+                Display.Exception(ex);
                 return false;
             }
 

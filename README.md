@@ -2,7 +2,7 @@
 Online school demo
 
 Yedidya Rozenberg
-Online school Demo
+Online School Demo
 (C#  Project)
 # 1.	About This Project
 This project is designed to demonstrate an online learning system. It was built to demonstrate knowledge and implementation of C# and Entity Framework Programming fundamentals and principles.
@@ -11,12 +11,12 @@ The project was Built with Entity Framework Core as the data access technology, 
 Programming	Data Access	Database	GUI
 C#	Entity Framework Core.	SQL Server	Console
 The project loosely implements the Singleton design pattern - All entities in the DAL layer access the database through the same instance, in order to avoid an access conflict. At the same time, the solution was designed through an additional class and not through a ScoolContext class, to allow EF to build the database using the code-first method.
-In addition, the project actually states the design pattern state in the course access department - with some options fixed in the CoursContext department, and some varying according to the user's definition - whether he is a teacher or a student, whether he is associated with the course, and whether the course is active, canceled or edited.
+In addition, the project actually states the design pattern state in the course access department - with some options fixed in the CourseContext department, and some varying according to the user's definition - whether he is a teacher or a student, whether he is associated with the course, and whether the course is active, canceled or edited.
 # 3.	Getting Started:
 •	_ Download the code source: _
 Download or clone the Github code from: https://github.com/Yedidya-rozenberg/CoursesManager
 _ Running the Demo: _
-In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it to full demo data to database. Comment the 19 line ( FullDatabase();) , recommend 20 line ( Display.LogginScreen();), and run again.
+In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it to full demo data to database. Comment the 19 line ( FullDatabase();) , recommend 20 line ( Display.LoginScreen();), and run again.
 **Sample connection:
 teacher:**
 Username cc
@@ -30,7 +30,7 @@ The project implements EF TPT (Table-per-Type) inheritance model. Table-per-type
 Users
 The first table of users includes only a username, password and one-to-one link to the table with the rest of the details - so that additional security can be created for this table.
 
-  public class UserLoggin
+  public class userLogin
   
     {
         [Key]
@@ -51,7 +51,7 @@ The first table of users includes only a username, password and one-to-one link 
     
 There are two types of users - teacher and user. I was debating whether to produce one class that both would inherit from, and in the end I decided to create them as two different classes, in order to make the demo more reliable.
 
-  public class Student //:UserDetiles
+  public class Student //:UserDetails
   
     {
         [Key]
@@ -59,21 +59,21 @@ There are two types of users - teacher and user. I was debating whether to produ
         [Required]
         public string FirstName { get; set; }
         [Required]
-        public string LestName { get; set; }
+        public string LastName { get; set; }
 
         [Phone]
-        public int PhonNumber { get; set; }
+        public int PhoneNumber { get; set; }
         [EmailAddress]
         public string email { get; set; }
 
-        public UserLoggin userLoggin { get; set; }
+        public userLogin userLogin { get; set; }
 
         public float Payment { get; set; }
 
-        public ICollection<Cours> Cours { get; set; }
+        public ICollection<Course> Course { get; set; }
     }
     
-  public class Teacher //: UserDetiles
+  public class Teacher //: UserDetails
   
     {
         [Key]
@@ -81,18 +81,18 @@ There are two types of users - teacher and user. I was debating whether to produ
         [Required]
         public string FirstName { get; set; }
         [Required]
-        public string LestName { get; set; }
+        public string LastName { get; set; }
 
         [Phone]
-        public int PhonNumber { get; set; }
+        public int PhoneNumber { get; set; }
         [EmailAddress]
         public string email { get; set; }
 
-        public UserLoggin userLoggin { get; set; }
+        public userLogin userLogin { get; set; }
 
-        public float Selery { get; set; }
+        public float Salary { get; set; }
 
-        public ICollection<Cours> TeachCours{ get; set; }
+        public ICollection<Course> TeachCourse{ get; set; }
         }
         
  It was later planned to add a third user, of the administrator type - who would approve or reject requests, and could add or remove other users.
@@ -102,13 +102,13 @@ The main object of the project is a course - which includes a link to the teache
   
     {
         [Key]
-        public int CoursID { get; set; }
+        public int CourseID { get; set; }
         
         [Required]
-        public string CoursName { get; set; }
+        public string CourseName { get; set; }
         
         [Required]
-        public char CuorsStatus { get; set; }
+        public char CourseStatus { get; set; }
 
         [ForeignKey("Teacher")]
         public int TeacherID { get; set; }
@@ -124,9 +124,9 @@ public class Unit
     {    
         [Key]
         public int UnitID { get; set; }
-        [ForeignKey("Cours")]
-        public int coursID { get; set; }
-        public Cours Cours { get; set; }
+        [ForeignKey("Course")]
+        public int CourseID { get; set; }
+        public Course Course { get; set; }
 
         [Required]
         public string UnitName { get; set; }
@@ -146,11 +146,11 @@ In addition to that, I created a class request that is designed to document and 
             this.RequestTime = DateTime.Now;
             this.RequestStatus = "Open";
         }
-        public Request(int coursID, char requesrCode, string requestDetiles, int? studentID = null, int? teacherID = null)
+        public Request(int CourseID, char requestCode, string requestDetails, int? studentID = null, int? teacherID = null)
         {
-            this.CoursID = coursID;
-            this.RequestCode = requesrCode;
-            this.RequestDetiles = requestDetiles;
+            this.CourseID = CourseID;
+            this.RequestCode = requestCode;
+            this.RequestDetails = requestDetails;
             this.StudentID = studentID;
             this.TeacherID = teacherID;
             this.RequestTime = DateTime.Now;
@@ -158,9 +158,9 @@ In addition to that, I created a class request that is designed to document and 
         }
         [Key]
         public int RequestID { get; set; }
-        [ForeignKey("Cours")]
-        public int CoursID { get; set; }
-        public Cours Cours { get; set; }
+        [ForeignKey("Course")]
+        public int CourseID { get; set; }
+        public Course Course { get; set; }
 
         [ForeignKey("Student")]
         public int? StudentID { get; set; }
@@ -172,7 +172,7 @@ In addition to that, I created a class request that is designed to document and 
         [Required]
         public char RequestCode { get; set; }
         [Required]
-        public string RequestDetiles { get; set; }
+        public string RequestDetails { get; set; }
         [Required]
         public DateTime RequestTime { get; set; }
         [Required]

@@ -1,5 +1,5 @@
 ﻿using CoursesManager.DAL;
-using CoursesManager.Logic.CoursState;
+using CoursesManager.Logic.CourseState;
 using CoursesManager.Models;
 using System;
 using System.Collections.Generic;
@@ -11,95 +11,95 @@ namespace CoursesManager.Logic
 {
    static class MainLogic // : IMainScreen
     {
-        public static void Allcourses()
+        public static void AllCourses()
         {
-            var Courses = CoursAccess.VeiwAllCuorses();
+            var Courses = CourseAccess.ViewAllCuorses();
             Display.PrintCourses(Courses);
         }
 
-        public static void MyCourses(UserLoggin user)
+        public static void MyCourses(userLogin user)
         {
-          var Courses =  CoursAccess.VeiwCuorsesListByUser(user);
+          var Courses =  CourseAccess.ViewCuorsesListByUser(user);
             Display.PrintCourses(Courses);
         }
 
-        internal static void OtherCours(UserLoggin user)
+        internal static void OtherCourse(userLogin user)
         {
-            var Courses = CoursAccess.VeiwOtherCuorsesListByUser(user);
+            var Courses = CourseAccess.ViewOtherCuorsesListByUser(user);
             Display.PrintCourses(Courses);
         }
 
 
-        public static void EnterCours(char user)
+        public static void EnterCourse(char user)
         {
             //parameters
-            int coursID;
-            CoursContext coursContext = null;
-            Display.Message("Enter ID of cours.");
-            var success = int.TryParse(Console.ReadLine(), out coursID);
+            int CourseID;
+            CourseContext CourseContext = null;
+            Display.Message("Enter ID of Course.");
+            var success = int.TryParse(Console.ReadLine(), out CourseID);
             if (!success)
             { Display.Message("Not a number"); return; }
-            //cours access
-            var cours = CoursAccess.VeiwCours(coursID);
-            if (cours == null)
-            { Display.Message("Can't find cours"); return; }
+            //Course access
+            var Course = CourseAccess.ViewCourse(CourseID);
+            if (Course == null)
+            { Display.Message("Can't find course"); return; }
             // Filter bag's
-            if (cours.CuorsStatus != 'C' && cours.CuorsStatus != 'O')
-            { Display.Message("The cours statud undifind."); return; }
+            if (Course.CourseStatus != 'C' && Course.CourseStatus != 'O')
+            { Display.Message("The Course status undefined."); return; }
             if (user != 's' && user != 't' && user != 'd')
-            { Display.Message("The user statud undifind."); return; }
-            //Defind cours state
+            { Display.Message("The user status undefined."); return; }
+            //Defind Course state
             if (user == 's')
-            { if (cours.CuorsStatus == 'C')
-                { Display.Message("The cours are closed."); return; }
+            { if (Course.CourseStatus == 'C')
+                { Display.Message("The Course is closed."); return; }
                 else
-                { coursContext = new(new StudentState(cours, Program.Student), cours); }
+                { CourseContext = new(new StudentState(course, Program.Student), Course); }
             }
             else
-            { if (Program.Teacher.TeacherID == cours.TeacherID)
+            { if (Program.Teacher.TeacherID == Course.TeacherID)
                 {
-                    if (cours.CuorsStatus == 'O')
-                    { coursContext = new(new ActiveState(cours, Program.Teacher), cours); }
-                    else if (cours.CuorsStatus == 'C')
-                    { coursContext = new(new CenceledState(cours, Program.Teacher), cours); }
+                    if (Course.CourseStatus == 'O')
+                    { CourseContext = new(new ActiveState(course, Program.Teacher), Course); }
+                    else if (Course.CourseStatus == 'C')
+                    { CourseContext = new(new CanceledState(course, Program.Teacher), Course); }
                 }
                 else if (user == 't')
-                { Display.Message("You are not teach this cours. If you want, register as a student."); return; }
-                else if (cours.CuorsStatus == 'C')
-                { Display.Message("The cours are closed."); return; }
+                { Display.Message("You are not teach this Course. If you want, register as a student."); return; }
+                else if (Course.CourseStatus == 'C')
+                { Display.Message("The Course are closed."); return; }
                 else
-                { coursContext = new(new StudentState(cours, Program.Student), cours); }
+                { CourseContext = new(new StudentState(course, Program.Student), Course); }
 
             }
-            //active cours screen
-            if (coursContext == null)
-            { Display.Message("Error occor"); return; }
+            //active Course screen
+            if (CourseContext == null)
+            { Display.Message("Error occur"); return; }
             else
             {
-                Display.CoursScreen(coursContext);
+                Display.CoursScreen(CourseContext);
             }
 
         }
 
-        public static void printMyDetiles()
+        public static void printMyDetails()
         {
-            if (Program.Student != null) {Display.PrintMyDetiles(Program.Student); }
+            if (Program.Student != null) {Display.PrintMyDetails(Program.Student); }
             else
             {
-                if (Program.Teacher != null) {Display.PrintMyDetiles(Program.Teacher); }
-                else { Display.Message("User undifind. Contact technical support."); }
+                if (Program.Teacher != null) {Display.PrintMyDetails(Program.Teacher); }
+                else { Display.Message("User undefined. Contact technical support."); }
             }
         }
 
-        public static void UpdateDetiles(char user)
+        public static void UpdateDetails(char user)
         {
             if (user==default(char))
-            { Display.Message("The user type undifinde. Contact technical support."); return; }
+            { Display.Message("The user type undefined. Contact technical support."); return; }
             Display.Message("Enter new details or press Enter.");
             Display.Message("First name:");
             var firstName = Console.ReadLine();
             Display.Message("Lest name:");
-            var lestName = Console.ReadLine();
+            var LastName = Console.ReadLine();
             Display.Message("E-mail:");
             var email = Console.ReadLine();
             Display.Message("Phone number:");
@@ -108,29 +108,29 @@ namespace CoursesManager.Logic
             switch (user)
             {
                 case ('s'):
-                    Student student = new() { FirstName = firstName?? default(string), LestName = lestName ?? default(string), email = email ?? default(string), PhonNumber = phone };
-                    var success = StudentAccess.UpdateDetiles(Program.Student.StudentID, student);
-                    var messege = success ? "The details have been updated" : "Error. rty again";
+                    Student student = new() { FirstName = firstName?? default(string), LastName = LastName ?? default(string), email = email ?? default(string), PhoneNumber = phone };
+                    var success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
+                    var messege = success ? "The details have been updated" : "Error. try again";
                     Display.Message(messege);
                                 break;
                 case ('t'):
-                    Teacher teacher = new() { FirstName = firstName ?? default(string), LestName = lestName ?? default(string), email = email ?? default(string), PhonNumber = phone };
-                     success = TeacherAccess.UpdateDetiles(Program.Teacher.TeacherID, teacher);
-                     messege = success ? "The details have been updated" : "Error. rty again";
+                    Teacher teacher = new() { FirstName = firstName ?? default(string), LastName = LastName ?? default(string), email = email ?? default(string), PhoneNumber = phone };
+                     success = TeacherAccess.UpdateDetails(Program.Teacher.TeacherID, teacher);
+                     messege = success ? "The details have been updated" : "Error. try again";
                     Display.Message(messege);
                     break;
                 case ('d'):
-                     student = new() { FirstName = firstName, LestName = lestName, email = email, PhonNumber = phone };
-                     success = StudentAccess.UpdateDetiles(Program.Student.StudentID, student);
-                     messege = success ? "The student details have been updated" : "Error. rty again";
+                     student = new() { FirstName = firstName, LastName = LastName, email = email, PhoneNumber = phone };
+                     success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
+                     messege = success ? "The student details have been updated" : "Error. try again";
                     Display.Message(messege);
-                     teacher = new() { FirstName = firstName, LestName = lestName, email = email, PhonNumber = phone };
-                    success = TeacherAccess.UpdateDetiles(Program.Teacher.TeacherID, teacher);
-                    messege = success ? "The teacher details have been updated" : "Error. rty again";
+                     teacher = new() { FirstName = firstName, LastName = LastName, email = email, PhoneNumber = phone };
+                    success = TeacherAccess.UpdateDetails(Program.Teacher.TeacherID, teacher);
+                    messege = success ? "The teacher details have been updated" : "Error. try again";
                     Display.Message(messege);
                     break;
                 default:
-                    Display.Message("The user type undifinde. Contact technical support.");
+                    Display.Message("The user type undefined. Contact technical support.");
                     break;
             }
         }

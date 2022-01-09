@@ -21,40 +21,40 @@ namespace CoursesManager.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CoursStudent", b =>
+            modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.Property<int>("CoursID")
+                    b.Property<int>("CourseID")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentsStudentID")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursID", "StudentsStudentID");
+                    b.HasKey("CourseID", "StudentsStudentID");
 
                     b.HasIndex("StudentsStudentID");
 
-                    b.ToTable("CoursStudent");
+                    b.ToTable("CourseStudent");
                 });
 
-            modelBuilder.Entity("CoursesManager.Models.Cours", b =>
+            modelBuilder.Entity("CoursesManager.Models.Course", b =>
                 {
-                    b.Property<int>("CoursID")
+                    b.Property<int>("CourseID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CoursName")
+                    b.Property<string>("CourseName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CuorsStatus")
+                    b.Property<string>("CourseStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
                     b.Property<int>("TeacherID")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursID");
+                    b.HasKey("CourseID");
 
                     b.HasIndex("TeacherID");
 
@@ -68,14 +68,14 @@ namespace CoursesManager.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CoursID")
+                    b.Property<int>("CourseID")
                         .HasColumnType("int");
 
                     b.Property<string>("RequestCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<string>("RequestDetiles")
+                    b.Property<string>("RequestDetails")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -94,7 +94,7 @@ namespace CoursesManager.Migrations
 
                     b.HasKey("RequestID");
 
-                    b.HasIndex("CoursID");
+                    b.HasIndex("CourseID");
 
                     b.HasIndex("StudentID");
 
@@ -114,14 +114,14 @@ namespace CoursesManager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LestName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Payment")
                         .HasColumnType("real");
 
-                    b.Property<int>("PhonNumber")
+                    b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("email")
@@ -143,14 +143,14 @@ namespace CoursesManager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LestName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhonNumber")
+                    b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
-                    b.Property<float>("Selery")
+                    b.Property<float>("Salary")
                         .HasColumnType("real");
 
                     b.Property<string>("email")
@@ -178,17 +178,17 @@ namespace CoursesManager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("coursID")
+                    b.Property<int>("CourseID")
                         .HasColumnType("int");
 
                     b.HasKey("UnitID");
 
-                    b.HasIndex("coursID");
+                    b.HasIndex("CourseID");
 
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("CoursesManager.Models.UserLoggin", b =>
+            modelBuilder.Entity("CoursesManager.Models.userLogin", b =>
                 {
                     b.Property<int>("UserID")
                         .ValueGeneratedOnAdd()
@@ -224,11 +224,11 @@ namespace CoursesManager.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CoursStudent", b =>
+            modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.HasOne("CoursesManager.Models.Cours", null)
+                    b.HasOne("CoursesManager.Models.Course", null)
                         .WithMany()
-                        .HasForeignKey("CoursID")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -239,10 +239,10 @@ namespace CoursesManager.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CoursesManager.Models.Cours", b =>
+            modelBuilder.Entity("CoursesManager.Models.Course", b =>
                 {
                     b.HasOne("CoursesManager.Models.Teacher", "Teacher")
-                        .WithMany("TeachCours")
+                        .WithMany("TeachCoursee")
                         .HasForeignKey("TeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -252,9 +252,9 @@ namespace CoursesManager.Migrations
 
             modelBuilder.Entity("CoursesManager.Models.Request", b =>
                 {
-                    b.HasOne("CoursesManager.Models.Cours", "Cours")
+                    b.HasOne("CoursesManager.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CoursID")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -266,7 +266,7 @@ namespace CoursesManager.Migrations
                         .WithMany()
                         .HasForeignKey("TeacherID");
 
-                    b.Navigation("Cours");
+                    b.Navigation("Course");
 
                     b.Navigation("Student");
 
@@ -275,45 +275,45 @@ namespace CoursesManager.Migrations
 
             modelBuilder.Entity("CoursesManager.Models.Unit", b =>
                 {
-                    b.HasOne("CoursesManager.Models.Cours", "Cours")
+                    b.HasOne("CoursesManager.Models.Course", "Course")
                         .WithMany("Units")
-                        .HasForeignKey("coursID")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cours");
+                    b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("CoursesManager.Models.UserLoggin", b =>
+            modelBuilder.Entity("CoursesManager.Models.userLogin", b =>
                 {
                     b.HasOne("CoursesManager.Models.Student", "Student")
-                        .WithOne("userLoggin")
-                        .HasForeignKey("CoursesManager.Models.UserLoggin", "StudentID");
+                        .WithOne("userLogin")
+                        .HasForeignKey("CoursesManager.Models.userLogin", "StudentID");
 
                     b.HasOne("CoursesManager.Models.Teacher", "Teacher")
-                        .WithOne("userLoggin")
-                        .HasForeignKey("CoursesManager.Models.UserLoggin", "TeacherID");
+                        .WithOne("userLogin")
+                        .HasForeignKey("CoursesManager.Models.userLogin", "TeacherID");
 
                     b.Navigation("Student");
 
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("CoursesManager.Models.Cours", b =>
+            modelBuilder.Entity("CoursesManager.Models.Course", b =>
                 {
                     b.Navigation("Units");
                 });
 
             modelBuilder.Entity("CoursesManager.Models.Student", b =>
                 {
-                    b.Navigation("userLoggin");
+                    b.Navigation("userLogin");
                 });
 
             modelBuilder.Entity("CoursesManager.Models.Teacher", b =>
                 {
-                    b.Navigation("TeachCours");
+                    b.Navigation("TeachCoursee");
 
-                    b.Navigation("userLoggin");
+                    b.Navigation("userLogin");
                 });
 #pragma warning restore 612, 618
         }

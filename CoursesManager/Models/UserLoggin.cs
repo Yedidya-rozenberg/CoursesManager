@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoursesManager.Models
 {
-    public class UserLoggin
+    public class userLogin
     {
         [Key]
         public int UserID { get; set; }
