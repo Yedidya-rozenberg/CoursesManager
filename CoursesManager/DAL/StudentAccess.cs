@@ -1,28 +1,24 @@
-﻿using CoursesManager.DAL;
-using CoursesManager.Models;
+﻿using CoursesManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CoursesManager.DAL
 {
     public class StudentAccess
     {
-        private static CoursesDBcontext _dbContext = GetDB.GetInstance();
-        private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
+        private static CoursesDBContext _dbContext = GetDB.GetInstance();
+        private static ReaderWriterLockSlim _rw = new ReaderWriterLockSlim();
 
         public static bool ViewDetails(int ID, ref Student s)
         {
             Student student = new();
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 student = _dbContext.Students.FirstOrDefault(s => s.StudentID == ID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
@@ -34,20 +30,20 @@ namespace CoursesManager.DAL
                 return false;
             }
             student.Payment = default(float);
-            student.userLogin = null;
+            student.UserLogin = null;
             s = student;
             return true;
 
         }
 
-        public static bool ViewMyDetails(userLogin user, ref Student student, ref Teacher teacher)
+        public static bool ViewMyDetails(UserLogin user, ref Student student, ref Teacher teacher)
         {
             try
             {
-               rw.EnterReadLock();
+               _rw.EnterReadLock();
                 student = _dbContext.Students.Find(user.StudentID);
                 teacher = _dbContext.Teachers.Find(user.TeacherID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
@@ -63,26 +59,26 @@ namespace CoursesManager.DAL
             bool result = false;
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 student = _dbContext.Students.Find(StudentID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Display.Exception(ex);
                 return result;
             }
             student.FirstName = (updated.FirstName != "") ? updated.FirstName : student.FirstName;
             student.LastName = (updated.LastName != "") ? updated.LastName : student.LastName;
-            student.email = (updated.email != "") ? updated.email : student.email;
+            student.Email = (updated.Email != "") ? updated.Email : student.Email;
             student.Payment = (updated.Payment != default(float)) ? updated.Payment : student.Payment;
             student.PhoneNumber = (updated.Payment != default(int)) ? updated.PhoneNumber : student.PhoneNumber;
             try
             {
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.Update(student);
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 result = true;
             }               
             catch (Exception ex)
@@ -99,19 +95,19 @@ namespace CoursesManager.DAL
             Student student;
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 student = _dbContext.Students.Include(s => s.Course).FirstOrDefault(p => p.StudentID == studentID);
                 if (student != null)
                 {
                     course = student.Course.FirstOrDefault(c => c.CourseID == CourseID);
                 }
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 if (course != null)
                 {
                     student.Course.Remove(course);
-                    rw.EnterWriteLock();
+                    _rw.EnterWriteLock();
                     _dbContext.SaveChanges();
-                    rw.ExitWriteLock();
+                    _rw.ExitWriteLock();
                     result = true;
                 }
                 else
@@ -132,27 +128,27 @@ namespace CoursesManager.DAL
             Student student;
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 student = _dbContext.Students.Include(s => s.Course).FirstOrDefault(p => p.StudentID == studentID);
                 if (student != null)
                 {
                     course = student.Course.FirstOrDefault(c => c.CourseID == CourseID);
-                    rw.ExitReadLock();
+                    _rw.ExitReadLock();
 
                 }
                 else
                 {
-                    rw.ExitReadLock();
+                    _rw.ExitReadLock();
                     Display.Message("Student not found");
                     return false; 
                 }
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 if (course==null)
                 {
                     student.Course.Add(course);
-                    rw.EnterWriteLock();
+                    _rw.EnterWriteLock();
                     _dbContext.SaveChanges();
-                    rw.ExitWriteLock();
+                    _rw.ExitWriteLock();
                     return true;
                 }
                 Display.Message("Record is exist");
@@ -164,13 +160,13 @@ namespace CoursesManager.DAL
             return false;
         }
 
-        public static userLogin CheckUser(userLogin user)
+        public static UserLogin CheckUser(UserLogin user)
         {
             try
             {
-                rw.EnterReadLock();
-                userLogin userLogin = _dbContext.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
-                rw.ExitReadLock();
+                _rw.EnterReadLock();
+                UserLogin userLogin = _dbContext.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+                _rw.ExitReadLock();
                 return userLogin;
             
             }
@@ -181,13 +177,13 @@ namespace CoursesManager.DAL
             }
         }
 
-        public static userLogin ReturnUserLoginByUserID(int userID)
+        public static UserLogin ReturnUserLoginByUserID(int userID)
         {
             try
             {
-                rw.EnterReadLock();
-                userLogin userLogin = _dbContext.Users.Find(userID);
-                rw.ExitReadLock();
+                _rw.EnterReadLock();
+                UserLogin userLogin = _dbContext.Users.Find(userID);
+                _rw.ExitReadLock();
                 if (userLogin == null)
                 {
                     Display.Message("Try again");

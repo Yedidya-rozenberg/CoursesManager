@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager.Models
 {
-   public class Student //:UserDetails
+    public class Student //:UserDetails
     {
         [Key]
         public int StudentID { get; set; }
@@ -16,13 +11,12 @@ namespace CoursesManager.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-
         [Phone]
         public int PhoneNumber { get; set; }
         [EmailAddress]
-        public string email { get; set; }
+        public string Email { get; set; }
 
-        public userLogin userLogin { get; set; }
+        public UserLogin UserLogin { get; set; }
 
         public float Payment { get; set; }
 

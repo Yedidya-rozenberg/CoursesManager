@@ -1,21 +1,17 @@
 ﻿using CoursesManager.DAL;
 using CoursesManager.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager.Logic.CourseState
 {
     public class EditState : ICourseState
     {
-        private Course course;
-        private Teacher teacher;
+        private Course _course;
+        private Teacher _teacher;
         public EditState(Course course, Teacher teacher)
         {
-            this.Course = course;
-            this.teacher = teacher;
+            this._course = course;
+            this._teacher = teacher;
         }
         public ICourseState Activate()
         {
@@ -23,23 +19,23 @@ namespace CoursesManager.Logic.CourseState
             string answer = Console.ReadLine();
             if (answer == "y")
             {// send request
-                var request = new Request(Course.CourseID, 'A', "activate course", null, teacher.TeacherID);
-                var requsrID = requestAccess.AddRequest(request);
+                var request = new Request(_course.CourseID, 'A', "activate course", null, _teacher.TeacherID);
+                var requsrID = RequestAccess.AddRequest(request);
                 string massege = (requsrID == 0) ? "Error. try again" : "Request was sent.";
                 Display.Message(massege);
                 // Execution Request
                 if ((requsrID != null))
                 {
 
-                    var success = requestAccess.MakeRequest(request);
+                    var success = RequestAccess.MakeRequest(request);
                     if (success)
                     {
-                        Console.WriteLine("the transaction has completed successfully.");
-                        return new ActiveState(course, teacher);
+                        Display.Message("the transaction has completed successfully.");
+                        return new ActiveState(_course, _teacher);
                     }
                     else
                     {
-                        Console.WriteLine("The request was denied.");
+                        Display.Message("The request was denied.");
                         return this;
                     }
                 }
@@ -50,14 +46,14 @@ namespace CoursesManager.Logic.CourseState
             }
             else
             {
-                Console.WriteLine("The action has been canceled.");
+                Display.Message("The action has been canceled.");
                 return this;
             }
         }
 
         public ICourseState Editing()
         {
-            Console.WriteLine("You are in edit mode.");
+            Display.Message("You are in edit mode.");
             return this;
         }
 
@@ -82,23 +78,23 @@ namespace CoursesManager.Logic.CourseState
             string confirm = Console.ReadLine();
             if (confirm == "y")
             {// send request
-                var request = new Request( Course.CourseID, 'D', "Delete course", null, teacher.TeacherID);
-                var requsrID = requestAccess.AddRequest(request);
+                var request = new Request( _course.CourseID, 'D', "Delete course", null, _teacher.TeacherID);
+                var requsrID = RequestAccess.AddRequest(request);
                 string massege = (requsrID == null)? "Error. try again":"Request send.";
                 Display.Message(massege);
                 // Execution Request
                 if ((requsrID != null))
                 {
 
-                    var success = requestAccess.MakeRequest(request);
+                    var success = RequestAccess.MakeRequest(request);
                     if (success)
                     {
-                        Console.WriteLine("the transaction has completed successfully.");
-                        return new CanceledState(course, teacher);
+                        Display.Message("the transaction has completed successfully.");
+                        return new CanceledState(_course, _teacher);
                     }
                     else
                     {
-                        Console.WriteLine("The request was denied.");
+                        Display.Message("The request was denied.");
                         return this;
                     }
                 }
@@ -111,7 +107,7 @@ namespace CoursesManager.Logic.CourseState
             }
             else
             {
-                Console.WriteLine("The action has been canceled.");
+                Display.Message("The action has been canceled.");
                 return this;
             }
 

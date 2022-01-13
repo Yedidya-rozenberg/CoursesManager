@@ -1,10 +1,7 @@
 ﻿using CoursesManager.DAL;
 using CoursesManager.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager.Logic.CourseState
 {
@@ -20,42 +17,42 @@ namespace CoursesManager.Logic.CourseState
 
     public class CourseContext
     {
-        private ICourseState State;
-        public Course course;
-        public CourseContext(ICourseState state, Course Course)
+        private ICourseState _state;
+        public Course Course;
+        public CourseContext(ICourseState state, Course course)
         {
-            this.State = state;
+            this._state = state;
             this.Course = course;
         }
 
         public void Activate()
         {
-            this.State = State.Activate();
+            this._state = _state.Activate();
         }
         public void Editing()
         {
-            this.State = State.Editing();
+            this._state = _state.Editing();
         }
        public void Remove()
         {
-            this.State = State.Remove();
+            this._state = _state.Remove();
         }
         public void EnterUnit(int unitID)
         {
             if (Course.Units.FirstOrDefault(u=>u.UnitID==unitID)!=null)
-                { State.EnterUnit(unitID);}
+                { _state.EnterUnit(unitID);}
             else
             { Display.Message("The course does not include this unit."); }
         }
 
         public void OtherOptions()
         {
-            State.OtherOptions(this);
+            _state.OtherOptions(this);
         }
 
         public void Register()
         {
-            State.Register();
+            _state.Register();
         }
 
         public void getUnits()
@@ -88,8 +85,8 @@ namespace CoursesManager.Logic.CourseState
             Display.Message("Enter learn material:");
             var material = Console.ReadLine();
             Display.Message("Enter questions:");
-            var Questions = Console.ReadLine();
-            Unit unit = new() { UnitName = name, StudyContent = material, Questions = Questions };
+            var questions = Console.ReadLine();
+            Unit unit = new() { UnitName = name, StudyContent = material, Questions = questions };
             var success = UnitAccess.AddUnit(unit, Course.CourseID);
             var messege = success ? "Successfully added." : "Error. try again";
             Display.Message(messege);

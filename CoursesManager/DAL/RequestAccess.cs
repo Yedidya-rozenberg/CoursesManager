@@ -3,28 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CoursesManager.DAL
 {
-    public static class requestAccess //: Irequast
+    public static class RequestAccess //: Irequast
     {
-        private static CoursesDBcontext _dbContext = GetDB.GetInstance();
-        private static ReaderWriterLockSlim rw = new ReaderWriterLockSlim();
+        private static CoursesDBContext _dbContext = GetDB.GetInstance();
+        private static ReaderWriterLockSlim _rw = new ReaderWriterLockSlim();
         //return the new requestID
         public static int? AddRequest(Request request)
         {
             try
             {
                 _dbContext.Add(request);
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
-                rw.EnterReadLock();
+                _rw.ExitWriteLock();
+                _rw.EnterReadLock();
                 var _request = _dbContext.requests.FirstOrDefault(r => r == request);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 if (_request != null)
                 { return _request.RequestID; }
                 else
@@ -40,9 +38,9 @@ namespace CoursesManager.DAL
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var reqests = _dbContext.requests.Where(r => r.RequestTime > time).Select(r => r).ToList();
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 return reqests;
             }
             catch (Exception ex)
@@ -53,22 +51,18 @@ namespace CoursesManager.DAL
 
         }
 
-        //public static List<Request> GetRequestByParameter(string parameterName, string Parameter)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public static bool UpdateRequestStatus(int requestID, string newStatus)
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var request = _dbContext.requests.Find(requestID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 request.RequestStatus = newStatus;
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -89,13 +83,13 @@ namespace CoursesManager.DAL
                 switch (request.RequestCode)
                 {
                     case 'A':
-                        success = activeCourse(request);
+                        success = ActiveCourse(request);
                         break;
                     case 'D':
                         success = DeleteCourse(request);
                         break;
                     case 'G':
-                        success = registerStudent(request);
+                        success = RegisterStudent(request);
                         break;
                     case 'M':
                         success = RemoveStudentFromCourse(request);
@@ -119,13 +113,13 @@ namespace CoursesManager.DAL
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 course.CourseStatus = 'C';
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -139,14 +133,14 @@ namespace CoursesManager.DAL
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == request.CourseID);
                 var student = _dbContext.Students.Find(request.StudentID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 course.Students.Remove(student);
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -156,18 +150,18 @@ namespace CoursesManager.DAL
             }
         }
 
-        private static bool registerStudent(Request request)
+        private static bool RegisterStudent(Request request)
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Include(c=>c.Students).FirstOrDefault(c=>c.CourseID == request.CourseID);
                 var student = _dbContext.Students.Find(request.StudentID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 course.Students.Add(student);
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -178,17 +172,17 @@ namespace CoursesManager.DAL
 
         }
 
-        private static bool activeCourse(Request request)
+        private static bool ActiveCourse(Request request)
         {
             try
             {
-                rw.EnterReadLock();
+                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
-                rw.ExitReadLock();
+                _rw.ExitReadLock();
                 course.CourseStatus = 'O';
-                rw.EnterWriteLock();
+                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                rw.ExitWriteLock();
+                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CoursesManager.Migrations
 {
-    [DbContext(typeof(CoursesDBcontext))]
+    [DbContext(typeof(CoursesDBContext))]
     [Migration("20211202162559_NEW")]
     partial class NEW
     {

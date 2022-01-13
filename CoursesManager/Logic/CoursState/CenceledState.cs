@@ -1,27 +1,23 @@
 ﻿using CoursesManager.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager.Logic.CourseState
 {
     public class CanceledState : ICourseState
     {
-        private Course course;
-        private Teacher teacher;
+        private Course _course;
+        private Teacher _teacher;
         public CanceledState(Course course, Teacher teacher)
         {
-            this.Course = course;
-            this.teacher = teacher;
+            this._course = course;
+            this._teacher = teacher;
         }
         public ICourseState Editing()
         {
-            if (Course.Teacher == teacher)
+            if (_course.Teacher == _teacher)
             {
-                Console.WriteLine("You move to Edit mode");
-                return new EditState(course, teacher);
+                Display.Message("You move to Edit mode");
+                return new EditState(_course, _teacher);
             }
             else
             { Console.WriteLine("You do not have permission to edit this course"); return this; }
@@ -29,30 +25,30 @@ namespace CoursesManager.Logic.CourseState
 
         public ICourseState Activate()
         {
-            Console.WriteLine("this Course canceled. If you want to run it, edit it beforehand. ");
+            Display.Message("this Course canceled. If you want to run it, edit it beforehand. ");
             return this;
         }
 
         public ICourseState Remove()
         {
-            Console.WriteLine("This Course hed been deleted.");
+            Display.Message("This Course hed been deleted.");
             return this;
         }
 
         public void EnterUnit(int unitID)
         {
-            Console.WriteLine("This Course hed been deleted.");
+            Display.Message("This Course hed been deleted.");
 
         }
 
         public void OtherOptions(CourseContext CourseContext)
         {
-            Console.WriteLine("There are no other options available.");
+            Display.Message("There are no other options available.");
         }
 
         public void Register()
         {
-            Console.WriteLine("This Course hed been deleted.");
+            Display.Message("This Course hed been deleted.");
         }
 
 

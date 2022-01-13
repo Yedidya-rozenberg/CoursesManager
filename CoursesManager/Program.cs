@@ -1,8 +1,5 @@
 ﻿using CoursesManager.DAL;
-using CoursesManager.Logic.CourseState;
 using CoursesManager.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,45 +7,45 @@ namespace CoursesManager
 {
     class Program
     {
-       public static userLogin user;
+       public static UserLogin user;
        public static Student Student;
        public static Teacher Teacher;
-       public static Course course;
 
-       public static void Main(string[] args)
+        public static void Main(string[] args)
         {
-           // var _dbContext = GetDB.GetInstance();
+            //FullDatabase();
+
             Display.LoginScreen();
 
         }
         static void FullDatabase()
         {
-            CoursesDBcontext _db = GetDB.GetInstance();
+            CoursesDBContext _db = GetDB.GetInstance();
             List<Student> students = new()
             {
-                new() { FirstName = "Avi", LastName = "Av", email = "aaa@Course.memail", PhoneNumber = 051111111, Payment = 11000, userLogin = new() { UserName = "a1", Password = "a1a1a1" } },
-                new() { FirstName = "Beni", LastName = "Bar", email = "bbb@Course.memail", PhoneNumber = 052222222, Payment = 12000, userLogin = new() { UserName = "b2", Password = "b2b2b2" } },
-                new() { FirstName = "Gadi", LastName = "Gal", email = "ccc@Course.memail", PhoneNumber = 053333333, Payment = 13000, userLogin = new() { UserName = "c3", Password = "c3c3c3" } },
-                new() { FirstName = "Dagi", LastName = "Dov", email = "ddd@Course.memail", PhoneNumber = 054444444, Payment = 14000, userLogin = new() { UserName = "d4", Password = "d4d4d4" } },
-                new() { FirstName = "Henzel", LastName = "Hertz", email = "eee@Course.memail", PhoneNumber = 055555555, Payment = 15000, userLogin = new() { UserName = "e5", Password = "e5e5e5" } },
-                new() { FirstName = "Vered", LastName = "Vav", email = "fff@Course.memail", PhoneNumber = 056666666, Payment = 16000, userLogin = new() { UserName = "f6", Password = "f6f6f6" } },
-                new() { FirstName = "Zeev", LastName = "Zits", email = "ggg@Course.memail", PhoneNumber = 057777777, Payment = 17000, userLogin = new() { UserName = "g7", Password = "g7g7g7" } },
-                new() { FirstName = "Haim", LastName = "Hen", email = "hhh@Course.memail", PhoneNumber = 058888888, Payment = 18000, userLogin = new() { UserName = "h8", Password = "h8h8h8" }},
-                new() { FirstName = "Tovia", LastName = "Tik", email = "iii@Course.memail", PhoneNumber = 059999999, Payment = 19000, userLogin = new() { UserName = "i9", Password = "i9i9i9" } },
-                new() { FirstName = "Yosi", LastName = "Yoval", email = "jjj@Course.memail", PhoneNumber = 050000000, Payment = 20000, userLogin = new() { UserName = "j10", Password = "j10j10j10" } }
+                new() { FirstName = "Avi", LastName = "Av", Email = "aaa@Course.memail", PhoneNumber = 051111111, Payment = 11000, UserLogin = new() { UserName = "a1", Password = "a1a1a1" } },
+                new() { FirstName = "Beni", LastName = "Bar", Email = "bbb@Course.memail", PhoneNumber = 052222222, Payment = 12000, UserLogin = new() { UserName = "b2", Password = "b2b2b2" } },
+                new() { FirstName = "Gadi", LastName = "Gal", Email = "ccc@Course.memail", PhoneNumber = 053333333, Payment = 13000, UserLogin = new() { UserName = "c3", Password = "c3c3c3" } },
+                new() { FirstName = "Dagi", LastName = "Dov", Email = "ddd@Course.memail", PhoneNumber = 054444444, Payment = 14000, UserLogin = new() { UserName = "d4", Password = "d4d4d4" } },
+                new() { FirstName = "Henzel", LastName = "Hertz", Email = "eee@Course.memail", PhoneNumber = 055555555, Payment = 15000, UserLogin = new() { UserName = "e5", Password = "e5e5e5" } },
+                new() { FirstName = "Vered", LastName = "Vav", Email = "fff@Course.memail", PhoneNumber = 056666666, Payment = 16000, UserLogin = new() { UserName = "f6", Password = "f6f6f6" } },
+                new() { FirstName = "Zeev", LastName = "Zits", Email = "ggg@Course.memail", PhoneNumber = 057777777, Payment = 17000, UserLogin = new() { UserName = "g7", Password = "g7g7g7" } },
+                new() { FirstName = "Haim", LastName = "Hen", Email = "hhh@Course.memail", PhoneNumber = 058888888, Payment = 18000, UserLogin = new() { UserName = "h8", Password = "h8h8h8" }},
+                new() { FirstName = "Tovia", LastName = "Tik", Email = "iii@Course.memail", PhoneNumber = 059999999, Payment = 19000, UserLogin = new() { UserName = "i9", Password = "i9i9i9" } },
+                new() { FirstName = "Yosi", LastName = "Yoval", Email = "jjj@Course.memail", PhoneNumber = 050000000, Payment = 20000, UserLogin = new() { UserName = "j10", Password = "j10j10j10" } }
             };
             List<Teacher> teachers = new()
             {
-                new() { FirstName = "Ash", LastName = "AV", email = "ta@Course.memail", PhoneNumber = 0501010101, Salary = 11000, userLogin = new() { UserName = "aa", Password = "a1a1a1" } },
-                new() { FirstName = "Ben", LastName = "Bab", email = "tb@Course.memail", PhoneNumber = 0520202020, Salary = 12000, userLogin = new() { UserName = "bb", Password = "b2b2b2" } },
-                new() { FirstName = "Gal", LastName = "Gig", email = "tc@Course.memail", PhoneNumber = 053030303, Salary = 13000, userLogin = new() { UserName = "cc", Password = "c3c3c3" } },
-                new() { FirstName = "Dov", LastName = "Dim", email = "td@Course.memail", PhoneNumber = 0540004404, Salary = 14000, userLogin = new() { UserName = "dd", Password = "d4d4d4" } },
-                new() { FirstName = "Hod", LastName = "Her", email = "te@Course.memail", PhoneNumber = 0550505050, Salary = 15000, userLogin = new() { UserName = "ee", Password = "e5e5e5" } },
-                new() { FirstName = "Vivi", LastName = "Vais", email = "tf@Course.memail", PhoneNumber = 0560606060, Salary = 16000, userLogin = new() { UserName = "ff", Password = "f6f6f6" } },
-                new() { FirstName = "Zuck", LastName = "Zor", email = "tg@Course.memail", PhoneNumber = 0570500507, Salary = 17000, userLogin = new() { UserName = "gg", Password = "g7g7g7" } },
-                new() { FirstName = "Hai", LastName = "Hovav", email = "th@Course.memail", PhoneNumber = 0580808080, Salary = 18000, userLogin = new() { UserName = "hh", Password = "h8h8h8" } },
-                new() { FirstName = "Titi", LastName = "Tok", email = "ti@Course.memail", PhoneNumber = 0590909909, Salary = 19000, userLogin = new() { UserName = "ii", Password = "i9i9i9" } },
-                new() { FirstName = "Yam", LastName = "Yong", email = "tg@Course.memail", PhoneNumber = 0501234567, Salary = 20000, userLogin = new() { UserName = "gg", Password = "j10j10j10" } }
+                new() { FirstName = "Ash", LastName = "AV", Email = "ta@Course.memail", PhoneNumber = 0501010101, Salary = 11000, UserLogin = new() { UserName = "aa", Password = "a1a1a1" } },
+                new() { FirstName = "Ben", LastName = "Bab", Email = "tb@Course.memail", PhoneNumber = 0520202020, Salary = 12000, UserLogin = new() { UserName = "bb", Password = "b2b2b2" } },
+                new() { FirstName = "Gal", LastName = "Gig", Email = "tc@Course.memail", PhoneNumber = 053030303, Salary = 13000, UserLogin = new() { UserName = "cc", Password = "c3c3c3" } },
+                new() { FirstName = "Dov", LastName = "Dim", Email = "td@Course.memail", PhoneNumber = 0540004404, Salary = 14000, UserLogin = new() { UserName = "dd", Password = "d4d4d4" } },
+                new() { FirstName = "Hod", LastName = "Her", Email = "te@Course.memail", PhoneNumber = 0550505050, Salary = 15000, UserLogin = new() { UserName = "ee", Password = "e5e5e5" } },
+                new() { FirstName = "Vivi", LastName = "Vais", Email = "tf@Course.memail", PhoneNumber = 0560606060, Salary = 16000, UserLogin = new() { UserName = "ff", Password = "f6f6f6" } },
+                new() { FirstName = "Zuck", LastName = "Zor", Email = "tg@Course.memail", PhoneNumber = 0570500507, Salary = 17000, UserLogin = new() { UserName = "gg", Password = "g7g7g7" } },
+                new() { FirstName = "Hai", LastName = "Hovav", Email = "th@Course.memail", PhoneNumber = 0580808080, Salary = 18000, UserLogin = new() { UserName = "hh", Password = "h8h8h8" } },
+                new() { FirstName = "Titi", LastName = "Tok", Email = "ti@Course.memail", PhoneNumber = 0590909909, Salary = 19000, UserLogin = new() { UserName = "ii", Password = "i9i9i9" } },
+                new() { FirstName = "Yam", LastName = "Yong", Email = "tg@Course.memail", PhoneNumber = 0501234567, Salary = 20000, UserLogin = new() { UserName = "gg", Password = "j10j10j10" } }
             };
             List<Course> Course = new()
             {
@@ -69,36 +66,11 @@ namespace CoursesManager
             _db.SaveChanges();
             students = _db.Students.ToList();
             Course = _db.Courses.ToList();
-            //List<StudentCours> studentCourses = new()
-            //{
-            //    new() { Course = cours[7], Student = students[1] },
-            //    new() { Course = cours[6], Student = students[2] },
-            //    new() { Course = cours[5], Student = students[3] },
-            //    new() { Course = cours[4], Student = students[4] },
-            //    new() { Course = cours[3], Student = students[5] },
-            //    new() { Course = cours[3], Student = students[6] },
-            //    new() { Course = cours[2], Student = students[7] },
-            //    new() { Course = cours[1], Student = students[8] },
-            //    new() { Course = cours[0], Student = students[9] },
-            //    new() { Course = cours[7], Student = students[0] },
-            //    new() { Course = cours[6], Student = students[1] },
-            //    new() { Course = cours[5], Student = students[2] },
-            //    new() { Course = cours[4], Student = students[3] },
-            //    new() { Course = cours[3], Student = students[4] },
-            //    new() { Course = cours[2], Student = students[5] },
-            //    new() { Course = cours[1], Student = students[6] },
-            //    new() { Course = cours[0], Student = students[7] },
-            //    new() { Course = cours[7], Student = students[8] },
-            //    new() { Course = cours[6], Student = students[9] },
-            //    new() { Course = cours[5], Student = students[0] },
-            //    new() { Course = cours[4], Student = students[1] },
-            //    new() { Course = cours[3], Student = students[2] },
-            //    new() { Course = cours[2], Student = students[3] },
-            //};
-            students[3].Course = new List<Course>() { cours[2], cours[4], cours[0] };
-            students[5].Course = new List<Course>() { cours[1], cours[3], cours[4] };
-            students[7].Course = new List<Course>() { cours[4], cours[6], cours[5] };
-            students[9].Course = new List<Course>() { cours[7], cours[0], cours[6] };
+   
+            students[3].Course = new List<Course>() { Course[2], Course[4], Course[0] };
+            students[5].Course = new List<Course>() { Course[1], Course[3], Course[4] };
+            students[7].Course = new List<Course>() { Course[4], Course[6], Course[5] };
+            students[9].Course = new List<Course>() { Course[7], Course[0], Course[6] };
             _db.UpdateRange(students);
             _db.SaveChanges();
         }

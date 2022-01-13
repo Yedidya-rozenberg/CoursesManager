@@ -1,50 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CoursesManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoursesManager.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoursesManager.DAL
 {
-   public class CoursesDBcontext : DbContext
+    public class CoursesDBContext : DbContext
     {
-        //private CoursesDBcontext()
-        //{
 
-        //}
-        //private static CoursesDBcontext instance;
-        //private static readonly object key = new object();
-        //public static CoursesDBcontext GetInstance()
-        //{
-        //    if (instance == null)
-        //    {
-        //        lock (key)
-        //        {
-        //            if (instance == null)
-        //            {
-        //                instance = new CoursesDBcontext();
-        //            }
-        //        }
-        //    }
-        //    return instance;
-        //}
-        public DbSet<userLogin> Users { get; set; }
+        public DbSet<UserLogin> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Request> requests { get; set; }
-        //public DbSet<StudentCours> studentCourse { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ScoolDB;Trusted_Connection=True;MultipleActiveResultSets=true;");
-
-                //optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=BlogDB;Trusted_Connection=True;MultipleActiveResultSets=true;")
                 //    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             }
             
@@ -53,8 +26,7 @@ namespace CoursesManager.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<userLogin>().Property("UserID").UseIdentityColumn(); //.HasKey(nameof(userLogin.UserID));
-           // modelBuilder.Entity<StudentCours>().HasKey(nameof(StudentCourse.StudentID), nameof(StudentCourse.CourseID));
+
         }
 
 
@@ -65,9 +37,9 @@ namespace CoursesManager.DAL
         {
 
         }
-        private static CoursesDBcontext instance;
+        private static CoursesDBContext instance;
         private static readonly object key = new object();
-        public static CoursesDBcontext GetInstance()
+        public static CoursesDBContext GetInstance()
         {
             if (instance == null)
             {
@@ -75,7 +47,7 @@ namespace CoursesManager.DAL
                 {
                     if (instance == null)
                     {
-                        instance = new CoursesDBcontext();
+                        instance = new CoursesDBContext();
                     }
                 }
             }

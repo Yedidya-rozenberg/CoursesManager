@@ -4,9 +4,6 @@ using CoursesManager.Logic.CourseState;
 using CoursesManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager
 {
@@ -60,7 +57,7 @@ namespace CoursesManager
                         CourseContext.OtherOptions();
                         break;
                     case "B":
-                        Display.Message("You remove to main screen");??
+                        Display.Message("You remove to main screen");
                         break;
                     default:
                         Display.Message("Error. Try again.");
@@ -89,6 +86,7 @@ namespace CoursesManager
                         var passwors = Console.ReadLine();
                         bool Success = LoginLogic.CheckLogin(userName, passwors);
                         var messege = Success ? " The connection was successful" : "faild";
+                        Display.Message(messege);
                         enter = Success;
                         break;
                     case "R":
@@ -144,7 +142,7 @@ namespace CoursesManager
                 switch (choice)
                 {
                     case "V":
-                        MainLogic.printMyDetails();
+                        MainLogic.PrintMyDetails();
                         break;
                     case "U":
                         MainLogic.UpdateDetails(user);
@@ -193,12 +191,6 @@ namespace CoursesManager
                     case "Q":
                         Display.Message(unit.Questions);
                         break;
-                    //case "N":
-                    //    UnitLogic.NextUnit();
-                    //    break;
-                    //case "P":
-                    //    UnitLogic.BackUnit();
-                    //break;
                     case "B":
                         Display.Message("You move to Course.");
                         break;
@@ -278,7 +270,7 @@ namespace CoursesManager
 
             }
         }
-        public static void Exeption(Exception exception)
+        public static void Exception(Exception exception)
         {
             Console.WriteLine(exception.Message);
         }
@@ -296,14 +288,14 @@ namespace CoursesManager
             var student = user as Student;
             if (student != null)
             {
-                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.email}");
+                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.Email}");
             }
             else
             {
                 var teacher = user as Teacher;
                 if (teacher != null)
                 {
-                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.email}");
+                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.Email}");
                 }
                 else
                 { Display.Exception(new TypeLoadException()); }
@@ -319,14 +311,14 @@ namespace CoursesManager
             var student = user as Student;
             if (student != null)
             {
-                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.email}\nPayment: {student.Payment}");
+                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.Email}\nPayment: {student.Payment}");
             }
             else
             {
                 var teacher = user as Teacher;
                 if (teacher != null)
                 {
-                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.email}\nSelety: {teacher.Salary}");
+                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.Email}\nSelety: {teacher.Salary}");
                 }
                 else
                 { Display.Exception(new TypeLoadException()); }
