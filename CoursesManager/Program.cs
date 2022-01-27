@@ -7,13 +7,11 @@ namespace CoursesManager
 {
     class Program
     {
-       public static UserLogin user;
-       public static Student Student;
-       public static Teacher Teacher;
+       public static UserDetails User;
 
         public static void Main(string[] args)
         {
-            //FullDatabase();
+            FullDatabase();
 
             Display.LoginScreen();
 
@@ -67,10 +65,10 @@ namespace CoursesManager
             students = _db.Students.ToList();
             Course = _db.Courses.ToList();
    
-            students[3].Course = new List<Course>() { Course[2], Course[4], Course[0] };
-            students[5].Course = new List<Course>() { Course[1], Course[3], Course[4] };
-            students[7].Course = new List<Course>() { Course[4], Course[6], Course[5] };
-            students[9].Course = new List<Course>() { Course[7], Course[0], Course[6] };
+            students[3].StudyCourses = new List<Course>() { Course[2], Course[4], Course[0] };
+            students[5].StudyCourses = new List<Course>() { Course[1], Course[3], Course[4] };
+            students[7].StudyCourses = new List<Course>() { Course[4], Course[6], Course[5] };
+            students[9].StudyCourses = new List<Course>() { Course[7], Course[0], Course[6] };
             _db.UpdateRange(students);
             _db.SaveChanges();
         }

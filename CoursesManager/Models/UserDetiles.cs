@@ -8,24 +8,26 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.Models
 {
-  
-    //abstract class UserDetails
-    //{
-    //    [ForeignKey("userLogin")]
-    //    public int UserDetailsID { get; set; }
-    //    [Required]
-    //    public string FirstName { get; set; }
-    //    [Required]
-    //    public string LastName { get; set; }
-    //    [Required]
-    //    public char UserStatus { get; set; }
-    //    [Phone]
-    //    public int PhoneNumber { get; set; }
-    //    [EmailAddress]
-    //    public string email { get; set; }
-     
-    //    virtual public userLogin userLogin { get; set; }
+    [Table("Users")]
+    public class UserDetails
+    {
+        [Key]
+        public int UserDetailsID { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Phone]
+        public int PhoneNumber { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
-    //    public ICollection<Course> StudyCuorses { get; set; }
-    //}
+        [ForeignKey("UserLogins")]
+        public int UserLoginID { get; set; }
+        virtual public UserLogin UserLogin { get; set; }
+
+        [NotMapped]
+        public TypeOfUser Type { get; set; }
+
+    }
 }

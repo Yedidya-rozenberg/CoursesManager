@@ -19,7 +19,7 @@ namespace CoursesManager.Logic.CourseState
             string answer = Console.ReadLine();
             if (answer == "y")
             {// send request
-                var request = new Request(_course.CourseID, 'A', "activate course", null, _teacher.TeacherID);
+                var request = new Request(_course.CourseID,RequestCode.ActiveCourse, _teacher.UserDetailsID);
                 var requsrID = RequestAccess.AddRequest(request);
                 string massege = (requsrID == 0) ? "Error. try again" : "Request was sent.";
                 Display.Message(massege);
@@ -78,7 +78,7 @@ namespace CoursesManager.Logic.CourseState
             string confirm = Console.ReadLine();
             if (confirm == "y")
             {// send request
-                var request = new Request( _course.CourseID, 'D', "Delete course", null, _teacher.TeacherID);
+                var request = new Request( _course.CourseID,RequestCode.DeleteCourse, _teacher.UserDetailsID);
                 var requsrID = RequestAccess.AddRequest(request);
                 string massege = (requsrID == null)? "Error. try again":"Request send.";
                 Display.Message(massege);

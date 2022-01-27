@@ -1,26 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoursesManager.Models
 {
-    public class Teacher //: UserDetails
+    [Table("Teachers")]
+    public class Teacher : UserDetails
     {
-        [Key]
-        public int TeacherID { get; set; }
-        [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        [Phone]
-        public int PhoneNumber { get; set; }
-        [EmailAddress]
-        public string Email { get; set; }
-
-        public UserLogin UserLogin { get; set; }
+        public Teacher()
+        {
+            this.Type = TypeOfUser.Teacher;
+        }
 
         public float Salary { get; set; }
 
-        public ICollection<Course> TeachCourses{ get; set; }
+       virtual public ICollection<Course> TeachCourses{ get; set; }
 
     }
 }

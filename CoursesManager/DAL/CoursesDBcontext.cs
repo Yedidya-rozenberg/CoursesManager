@@ -6,12 +6,13 @@ namespace CoursesManager.DAL
     public class CoursesDBContext : DbContext
     {
 
-        public DbSet<UserLogin> Users { get; set; }
+        public DbSet<UserLogin> UserLogins { get; set; }
+        public DbSet<UserDetails>  Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Unit> Units { get; set; }
-        public DbSet<Request> requests { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,6 +27,9 @@ namespace CoursesManager.DAL
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<UserDetails>().ToTable("Users");
+            modelBuilder.Entity<Student>().ToTable("Students");
+            modelBuilder.Entity<Teacher>().ToTable("Teachers");
 
         }
 

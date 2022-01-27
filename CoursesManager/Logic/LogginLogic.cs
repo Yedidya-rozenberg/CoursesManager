@@ -5,14 +5,10 @@ namespace CoursesManager.Logic
 {
     public static class LoginLogic //: ILoginScreen
     {
-        public static bool CheckLogin(string userName, string password)
+        public static bool CheckLogin(UserLogin user)
         {
-            UserLogin user = new() { UserName = userName, Password = password };
-            user = StudentAccess.CheckUser(user);
-            if (user == null)
-            { return false; }
-            else
-            { Program.user = user; return true; }
+            var loggin = UserAccess.CheckUser(user);
+            return (loggin != null);
         }
     }
 }

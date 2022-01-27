@@ -17,12 +17,8 @@ namespace CoursesManager.DAL
             try
             {
                 _dbContext.Add(request);
-                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
-                _rw.EnterReadLock();
-                var _request = _dbContext.requests.FirstOrDefault(r => r == request);
-                _rw.ExitReadLock();
+                var _request = _dbContext.Requests.FirstOrDefault(r => r == request);
                 if (_request != null)
                 { return _request.RequestID; }
                 else
@@ -39,14 +35,17 @@ namespace CoursesManager.DAL
             try
             {
                 _rw.EnterReadLock();
-                var reqests = _dbContext.requests.Where(r => r.RequestTime > time).Select(r => r).ToList();
-                _rw.ExitReadLock();
+                var reqests = _dbContext.Requests.Where(r => r.RequestTime > time).Select(r => r).ToList();
                 return reqests;
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
                 return null;
+            }
+            finally
+            {
+                _rw.ExitReadLock();
             }
 
         }
@@ -56,13 +55,9 @@ namespace CoursesManager.DAL
         {
             try
             {
-                _rw.EnterReadLock();
-                var request = _dbContext.requests.Find(requestID);
-                _rw.ExitReadLock();
+                var request = _dbContext.Requests.Find(requestID);
                 request.RequestStatus = newStatus;
-                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -80,18 +75,18 @@ namespace CoursesManager.DAL
                 { Display.Exception(new NullReferenceException()); return false; }
 
                 bool success;
-                switch (request.RequestCode)
+                switch (request.Code)
                 {
-                    case 'A':
+                    case RequestCode.ActiveCourse:
                         success = ActiveCourse(request);
                         break;
-                    case 'D':
+                    case RequestCode.DeleteCourse:
                         success = DeleteCourse(request);
                         break;
-                    case 'G':
+                    case RequestCode.Register:
                         success = RegisterStudent(request);
                         break;
-                    case 'M':
+                    case RequestCode.RemoveStudent:
                         success = RemoveStudentFromCourse(request);
                         break;
                     default:
@@ -113,13 +108,9 @@ namespace CoursesManager.DAL
         {
             try
             {
-                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
-                _rw.ExitReadLock();
                 course.CourseStatus = 'C';
-                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
@@ -133,15 +124,11 @@ namespace CoursesManager.DAL
         {
             try
             {
-                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == request.CourseID);
-                var student = _dbContext.Students.Find(request.StudentID);
-                _rw.ExitReadLock();
-                course.Students.Remove(student);
-                _rw.EnterWriteLock();
+                var student = _dbContext.Students.FirstOrDefault(s=>s.UserDetailsID == request.UserDetailsID);
+                var success =  course.Students.Remove(student);
                 _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
-                return true;
+                return success;
             }
             catch (Exception ex)
             {
@@ -154,15 +141,16 @@ namespace CoursesManager.DAL
         {
             try
             {
-                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Include(c=>c.Students).FirstOrDefault(c=>c.CourseID == request.CourseID);
-                var student = _dbContext.Students.Find(request.StudentID);
-                _rw.ExitReadLock();
-                course.Students.Add(student);
-                _rw.EnterWriteLock();
-                _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
-                return true;
+                var student = _dbContext.Students.FirstOrDefault(s => s.UserDetailsID == request.UserDetailsID);
+                if (course != null && student != null)
+                {
+                    course.Students.Add(student);
+                    _dbContext.SaveChanges();
+                    return true;
+                }
+                    return false;
+             
             }
             catch (Exception ex)
             {
@@ -176,14 +164,14 @@ namespace CoursesManager.DAL
         {
             try
             {
-                _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
-                _rw.ExitReadLock();
-                course.CourseStatus = 'O';
-                _rw.EnterWriteLock();
-                _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
-                return true;
+                if (course != null)
+                {
+                    course.CourseStatus = 'O';
+                    _dbContext.SaveChanges();
+                    return true;
+                }
+                    return false;
             }
             catch (Exception ex)
             {

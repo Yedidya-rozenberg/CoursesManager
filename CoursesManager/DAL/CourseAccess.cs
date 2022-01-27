@@ -102,21 +102,21 @@ namespace CoursesManager.DAL
 
         }
 
-        public static IEnumerable<Course> ViewCoursesListByUser(UserLogin user)
+        public static IEnumerable<Course> ViewCoursesListByUser(UserDetails user)
         {
             try
             {
                 var courses = new List<Course>();
-                if (user.StudentID != null)
+                if (user.Type==TypeOfUser.Student || user.Type == TypeOfUser.TeacherAndStudent)
                 {
                     _rw.EnterReadLock();
-                    courses.AddRange(_dbContext.Students.Include(s=>s.Course).Where(s=>s.StudentID==user.StudentID).Select(s=>s.Course).FirstOrDefault().ToList());
+                    courses.AddRange(_dbContext.Students.Include(s=>s.StudyCourses).Where(s=>s.UserDetailsID==user.UserDetailsID).Select(s=>s.StudyCourses).FirstOrDefault().ToList());
                     _rw.ExitReadLock();
                 }
-                if (user.TeacherID != null)
+                if (user.Type == TypeOfUser.Student || user.Type == TypeOfUser.TeacherAndStudent)
                 {
                     _rw.EnterReadLock();
-                    courses.AddRange(_dbContext.Teachers.Include(t => t.TeachCourses).Where(t => t.TeacherID == user.TeacherID).Select(t => t.TeachCourses).FirstOrDefault().ToList());
+                    courses.AddRange(_dbContext.Teachers.Include(t => t.TeachCourses).Where(t => t.UserDetailsID == user.UserDetailsID).Select(t => t.TeachCourses).FirstOrDefault().ToList());
                     _rw.ExitReadLock();
                 }
 
@@ -131,7 +131,7 @@ namespace CoursesManager.DAL
 
         }
 
-        public static IEnumerable<Course> ViewOtherCuorsesListByUser(UserLogin user)
+        public static IEnumerable<Course> ViewOtherCuorsesListByUser(UserDetails user)
         {
             var allCourses = ViewAllCourses();
              var userCourse = ViewCoursesListByUser(user);
@@ -139,14 +139,16 @@ namespace CoursesManager.DAL
             return otherCourse;
         }
 
-        public static bool CheckStudentCourse(int StudentID, int CourseID)
+        public static bool CheckStudentCourse(UserDetails user, int CourseID)
         {
             try
             {
                 _rw.EnterReadLock();
-                var check = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == CourseID).Students.FirstOrDefault(s => s.StudentID == StudentID);
+                var cours = _dbContext.Courses.Include(c => c.Students).FirstOrDefault(c => c.CourseID == CourseID);
+                var studend = _dbContext.Students.FirstOrDefault(s => s.UserDetailsID == user.UserDetailsID);
                 _rw.ExitReadLock();
-                return (check != null);
+                var check = cours.Students.Contains(studend);
+                return (check);
             }
             catch (Exception ex)
             {

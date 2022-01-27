@@ -13,24 +13,25 @@ namespace CoursesManager.Logic
             Display.PrintCourses(Courses);
         }
 
-        public static void MyCourses(UserLogin user)
+        public static void MyCourses(UserDetails user)
         {
           var Courses =  CourseAccess.ViewCoursesListByUser(user);
             Display.PrintCourses(Courses);
         }
 
-        internal static void OtherCourse(UserLogin user)
+        internal static void OtherCourse(UserDetails user)
         {
             var Courses = CourseAccess.ViewOtherCuorsesListByUser(user);
             Display.PrintCourses(Courses);
         }
 
 
-        public static void EnterCourse(char user)
+        public static void EnterCourse()
         {
             //parameters
             int CourseID;
             CourseContext CourseContext = null;
+
             Display.Message("Enter ID of Course.");
             var success = int.TryParse(Console.ReadLine(), out CourseID);
             if (!success)
@@ -42,29 +43,34 @@ namespace CoursesManager.Logic
             // Filter bag's
             if (course.CourseStatus != 'C' && course.CourseStatus != 'O')
             { Display.Message("The Course status undefined."); return; }
-            if (user != 's' && user != 't' && user != 'd')
+            if (Program.User.Type == default(TypeOfUser))
             { Display.Message("The user status undefined."); return; }
             //Defind Course state
-            if (user == 's')
+            if (Program.User.Type == TypeOfUser.Student)
             { if (course.CourseStatus == 'C')
                 { Display.Exception(new AccessViolationException("The Course is closed.")); return; }
                 else
-                { CourseContext = new(new StudentState(course, Program.Student), course); }
+                { CourseContext = new(new StudentState(course, Program.User), course); }
             }
             else
-            { if (Program.Teacher.TeacherID == course.TeacherID)
+            {
+                Teacher teacher = TeacherAccess.ViewTeacher(Program.User.UserDetailsID);
+                if (teacher != null)
                 {
-                    if (course.CourseStatus == 'O')
-                    { CourseContext = new(new ActiveState(course, Program.Teacher), course); }
-                    else if (course.CourseStatus == 'C')
-                    { CourseContext = new(new CanceledState(course, Program.Teacher), course); }
+                    if (teacher.TeacherID == course.TeacherID)
+                    {
+                        if (course.CourseStatus == 'O')
+                        { CourseContext = new(new ActiveState(course, teacher), course); }
+                        else if (course.CourseStatus == 'C')
+                        { CourseContext = new(new CanceledState(course, teacher), course); }
+                    }
+                    else //if (Program.User.Type == TypeOfUser.Teacher)
+                    { Display.Exception(new AccessViolationException("You are not teach this Course. If you want, register as a student.")); return; }
+                    //else if (course.CourseStatus == 'C')
+                    //{ Display.Exception(new AccessViolationException("The Course are closed.")); return; }
+                    //else
+                    //{ CourseContext = new(new StudentState(course, Program.User), course); }
                 }
-                else if (user == 't')
-                { Display.Exception(new AccessViolationException("You are not teach this Course. If you want, register as a student.")); return; }
-                else if (course.CourseStatus == 'C')
-                { Display.Exception(new AccessViolationException("The Course are closed.")); return; }
-                else
-                { CourseContext = new(new StudentState(course, Program.Student), course); }
 
             }
             //active Course screen
@@ -79,58 +85,39 @@ namespace CoursesManager.Logic
 
         public static void PrintMyDetails()
         {
-            if (Program.Student != null) {Display.PrintMyDetails(Program.Student); }
-            else
+            if (Program.User.Type == TypeOfUser.Teacher)
             {
-                if (Program.Teacher != null) {Display.PrintMyDetails(Program.Teacher); }
-                else { Display.Message("User undefined. Contact technical support."); }
+                Teacher teacher = TeacherAccess.ViewTeacher(Program.User.UserDetailsID);
+                Display.PrintMyDetails<Teacher>(Program.User, teacher);
             }
+            else if (Program.User.Type == TypeOfUser.Student)
+            {
+                Student student = StudentAccess.ViewStudentDetails(Program.User.UserDetailsID);
+                Display.PrintMyDetails<Student>(Program.User, student);
+
+            }
+            else { Display.Message("User undefined. Contact technical support."); }
+
         }
 
-        public static void UpdateDetails(char user)
+        public static void UpdateDetails()
         {
-            if (user==default(char))
-            { Display.Message("The user type undefined. Contact technical support."); return; }
+            //if (Program.User.Type==default(TypeOfUser))
+            //{ Display.Message("The user type undefined. Contact technical support."); return; }
+            UserDetails user = new();
             Display.Message("Enter new details or press Enter.");
             Display.Message("First name:");
-            var firstName = Console.ReadLine();
+            user.FirstName = Console.ReadLine();
             Display.Message("Lest name:");
-            var lastName = Console.ReadLine();
+            user.LastName = Console.ReadLine();
             Display.Message("E-mail:");
-            var email = Console.ReadLine();
+            user.Email = Console.ReadLine();
             Display.Message("Phone number:");
             int phone;
-            int.TryParse(Console.ReadLine(),out phone);
-            switch (user)
-            {
-                case ('s'):
-                    Student student = new() { FirstName = firstName?? default(string), LastName = lastName ?? default(string), Email = email ?? default(string), PhoneNumber = phone };
-                    var success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
-                    var messege = success ? "The details have been updated" : "Error. try again";
-                    Display.Message(messege);
-                                break;
-                case ('t'):
-                    Teacher teacher = new() { FirstName = firstName ?? default(string), LastName = lastName ?? default(string), Email = email ?? default(string), PhoneNumber = phone };
-                     success = TeacherAccess.UpdateDetails(Program.Teacher.TeacherID, teacher);
-                     messege = success ? "The details have been updated" : "Error. try again";
-                    Display.Message(messege);
-                    break;
-                case ('d'):
-                     student = new() { FirstName = firstName, LastName = lastName, Email = email, PhoneNumber = phone };
-                     success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
-                     messege = success ? "The student details have been updated" : "Error. try again";
-                    Display.Message(messege);
-                     teacher = new() { FirstName = firstName, LastName = lastName, Email = email, PhoneNumber = phone };
-                    success = TeacherAccess.UpdateDetails(Program.Teacher.TeacherID, teacher);
-                    messege = success ? "The teacher details have been updated" : "Error. try again";
-                    Display.Message(messege);
-                    break;
-                default:
-                    Display.Message("The user type undefined. Contact technical support.");
-                    break;
-            }
+            int.TryParse(Console.ReadLine(), out phone);
+            user.PhoneNumber = phone;
+            UserAccess.UpdateDetails(user);
         }
-
-
     }
 }
+

@@ -37,33 +37,30 @@ namespace CoursesManager.DAL
             }        
         }
 
-        public static bool RemoveUnit(int unitID, int TeacherID, Course Course)
+        public static bool RemoveUnit(int unitID, Course Course, UserDetails user)
         {
+            Teacher teacher = TeacherAccess.ViewTeacher(user.UserDetailsID);
             try
             {
-                _rw.EnterReadLock();
                 var _course = _dbContext.Courses.Include(c=>c.Units).FirstOrDefault(c=>c==Course);
                 var unit = _dbContext.Units.Find(unitID);
-                _rw.ExitReadLock();
+
                 if (unit == null || _course==null)
                 {
                     Display.Exception(new NullReferenceException());
                     return false;
                 }
-                if (!(Course.TeacherID == TeacherID && Course.Units.Contains(unit)))
+                if (!(Course.TeacherID == teacher.TeacherID && Course.Units.Contains(unit)))
                 {
                     Display.Exception(new Exception("Can't do this"));
                     return false;
                 }
                 _dbContext.Remove(unit);
-                _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
-                _rw.ExitWriteLock();
                 return true;
             }
             catch (Exception ex)
             {
-
                 Display.Exception(ex);
                 return false;
             }

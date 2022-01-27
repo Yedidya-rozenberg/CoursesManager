@@ -12,12 +12,9 @@ namespace CoursesManager.Models
         [Required]
         public string Password { get; set; }
 
-        [ForeignKey("Student")]
-        public int? StudentID { get; set; }
-        public Student Student { get; set; }
+        public int? UserDetailsesID { get; set; }
+        virtual public UserDetails userDetails { get; set; }
 
-        [ForeignKey("Teacher")]
-        public int? TeacherID { get; set; }
-        public Teacher Teacher { get; set; }
+
     }
 }

@@ -68,6 +68,7 @@ namespace CoursesManager
 
         public static void LoginScreen()
         {
+            UserLogin userLogin = new();
             string choice = "";
             bool enter = false;
             while (!(choice == "X" || enter == true))
@@ -81,10 +82,10 @@ namespace CoursesManager
                 {
                     case "E":
                         Display.Message("Enter user name");
-                        var userName = Console.ReadLine();
+                        userLogin.UserName = Console.ReadLine();
                         Display.Message("Enter Password");
-                        var passwors = Console.ReadLine();
-                        bool Success = LoginLogic.CheckLogin(userName, passwors);
+                        userLogin.Password =  Console.ReadLine();
+                        bool Success = LoginLogic.CheckLogin(userLogin);
                         var messege = Success ? " The connection was successful" : "faild";
                         Display.Message(messege);
                         enter = Success;
@@ -102,10 +103,10 @@ namespace CoursesManager
             }
             if (enter == true)
             {
-                var success = StudentAccess.ViewMyDetails(Program.user, ref Program.Student, ref Program.Teacher);
+                var success = StudentAccess.ViewUserDetails(userLogin, ref Program.User);
                 if (success)
                 {
-                  var name = (Program.Student != null) ? Program.Student.FirstName : Program.Teacher.FirstName;
+                    var name = Program.User.FirstName + Program.User.LastName;
                 Display.Message($"Welcome {name}!");
                 Display.MainScreen();
                 }
@@ -118,14 +119,6 @@ namespace CoursesManager
         }
         public static void MainScreen()
         {
-            char user = default(char);
-            if (Program.Student != null && Program.Teacher != null) { user = 'd'; }
-            else
-
-            if (Program.Student != null) { user = 's'; }
-            else
-            if (Program.Teacher != null) { user = 't'; }
-            else { Display.Message("User undefined. please update your Details."); }
 
             string choice = "";
             while (!(choice == "X"))
@@ -145,19 +138,19 @@ namespace CoursesManager
                         MainLogic.PrintMyDetails();
                         break;
                     case "U":
-                        MainLogic.UpdateDetails(user);
+                        MainLogic.UpdateDetails();
                         break;
                     case "C":
-                        MainLogic.MyCourses(Program.user);
+                        MainLogic.MyCourses(Program.User);
                         break;
                     case "O":
-                        MainLogic.OtherCourse(Program.user);
+                        MainLogic.OtherCourse(Program.User);
                         break;
                     case "A":
                         MainLogic.AllCourses();
                         break;
                     case "E":
-                        MainLogic.EnterCourse(user);
+                        MainLogic.EnterCourse();
                         break;
                     case "X":
                         Display.Message("The program closed.");
@@ -306,19 +299,19 @@ namespace CoursesManager
 
         }
 
-        public static void PrintMyDetails<T>(T user)
+        public static void PrintMyDetails<T>(UserDetails userDetiles, T user)
         {
             var student = user as Student;
             if (student != null)
             {
-                Console.WriteLine($"Student name: {student.FirstName} {student.LastName}\nPhone number: {student.PhoneNumber}\nE-mail: {student.Email}\nPayment: {student.Payment}");
+                Console.WriteLine($"Student name: {userDetiles.FirstName} {userDetiles.LastName}\nPhone number: {userDetiles.PhoneNumber}\nE-mail: {userDetiles.Email}\nPayment: {student.Payment}");
             }
             else
             {
                 var teacher = user as Teacher;
                 if (teacher != null)
                 {
-                    Console.WriteLine($"Teacher name: {teacher.FirstName} {teacher.LastName}\nPhone number: {teacher.PhoneNumber}\nE-mail: {teacher.Email}\nSelety: {teacher.Salary}");
+                    Console.WriteLine($"Teacher name: {userDetiles.FirstName} {userDetiles.LastName}\nPhone number: {userDetiles.PhoneNumber}\nE-mail: {userDetiles.Email}\nSelety: {teacher.Salary}");
                 }
                 else
                 { Display.Exception(new TypeLoadException()); }
@@ -345,7 +338,7 @@ namespace CoursesManager
             {
                 foreach (var item in requests)
                 {
-                    Console.WriteLine($"Course ID: {item.CourseID}\t Request: {item.RequestDetails}\tCode:{item.RequestCode}\tRequest time:{item.RequestTime}");
+                    Console.WriteLine($"Course ID: {item.CourseID}\t Request: {item.RequestDetails}\tCode:{item.Code}\tRequest time:{item.RequestTime}");
                 }
             }
             else

@@ -7,11 +7,11 @@ namespace CoursesManager.Logic.CourseState
     public class StudentState : ICourseState
     {
         private Course _course;
-        private Student _student;
-        public StudentState(Course course, Student student)
+        private UserDetails _user;
+        public StudentState(Course course, UserDetails user)
         {
             this._course = course;
-            this._student = student;
+            this._user = user;
         }
         public ICourseState Activate()
         {
@@ -29,7 +29,7 @@ namespace CoursesManager.Logic.CourseState
 
         public void EnterUnit(int unitID)
         {
-            if (CourseAccess.CheckStudentCourse(_student.StudentID ,_course.CourseID))
+            if (CourseAccess.CheckStudentCourse(_user ,_course.CourseID))
             {
                 Display.UnitScreen(unitID);
             }
@@ -44,14 +44,14 @@ namespace CoursesManager.Logic.CourseState
 
         public void Register()
         {
-            if (!CourseAccess.CheckStudentCourse(_student.StudentID, _course.CourseID))
+            if (!CourseAccess.CheckStudentCourse(_user, _course.CourseID))
             {
 
                 Display.Message("Do you want to register for the course? y/n");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {// send request
-                    var request = new Request(_course.CourseID, 'G', "Register student", _student.StudentID);
+                    var request = new Request(_course.CourseID, RequestCode.Register, _user.UserDetailsID);
                     var requsrID = RequestAccess.AddRequest(request);
                     string massege = (requsrID == null) ? "Error. try again" : "Request was sent.";
                     Display.Message(massege);
@@ -74,13 +74,13 @@ namespace CoursesManager.Logic.CourseState
 
         public ICourseState Remove()
         {
-            if (CourseAccess.CheckStudentCourse(_student.StudentID, _course.CourseID))
+            if (CourseAccess.CheckStudentCourse(_user, _course.CourseID))
             {
                 Display.Message("Do you want to remove from this course? y/n");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {// send request
-                    var request = new Request(_course.CourseID, 'M', "Remove student from course", _student.StudentID);
+                    var request = new Request(_course.CourseID, RequestCode.RemoveStudent, _user.UserDetailsID);
                     var requsrID = RequestAccess.AddRequest(request);
                     string massege = (requsrID == null) ? "Error. try again" : "Request was sent.";
                     Display.Message(massege);

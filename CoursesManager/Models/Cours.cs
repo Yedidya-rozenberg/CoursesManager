@@ -14,8 +14,8 @@ namespace CoursesManager.Models
         public char CourseStatus { get; set; }
 
         [ForeignKey("Teacher")]
-        public int TeacherID { get; set; }
-        public Teacher Teacher { get; set; }
+        public int UserDetailsID { get; set; }
+        virtual public Teacher Teacher { get; set; }
 
         public ICollection<Student> Students { get; set; }
 

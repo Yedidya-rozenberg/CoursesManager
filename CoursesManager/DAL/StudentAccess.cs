@@ -11,46 +11,36 @@ namespace CoursesManager.DAL
         private static CoursesDBContext _dbContext = GetDB.GetInstance();
         private static ReaderWriterLockSlim _rw = new ReaderWriterLockSlim();
 
-        public static bool ViewDetails(int ID, ref Student s)
+        public static Student ViewStudentDetails(int UserDetilesID)
         {
-            Student student = new();
             try
             {
-                _rw.EnterReadLock();
-                student = _dbContext.Students.FirstOrDefault(s => s.StudentID == ID);
-                _rw.ExitReadLock();
+               var student = _dbContext.Students.FirstOrDefault(s =>s.UserDetailsID == UserDetilesID);
+                return student;
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
-                return false;
+                return null;
             }
-            if (student == null)
-            {
-                return false;
-            }
-            student.Payment = default(float);
-            student.UserLogin = null;
-            s = student;
-            return true;
 
         }
 
-        public static bool ViewMyDetails(UserLogin user, ref Student student, ref Teacher teacher)
+
+
+        public static bool ViewUserDetails(UserLogin user, ref UserDetails userDetails)
         {
             try
             {
                _rw.EnterReadLock();
-                student = _dbContext.Students.Find(user.StudentID);
-                teacher = _dbContext.Teachers.Find(user.TeacherID);
+                userDetails = _dbContext.Users.Find(user.UserDetailsesID);
                 _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
             }
-            if(student!= null || teacher != null) { return true; }
-            else { return false; }
+            return (userDetails != null);
         }
 
         public static bool UpdateDetails(int StudentID, Student updated)
@@ -96,15 +86,15 @@ namespace CoursesManager.DAL
             try
             {
                 _rw.EnterReadLock();
-                student = _dbContext.Students.Include(s => s.Course).FirstOrDefault(p => p.StudentID == studentID);
+                student = _dbContext.Students.Include(s => s.StudyCourses).FirstOrDefault(p => p.StudentID == studentID);
                 if (student != null)
                 {
-                    course = student.Course.FirstOrDefault(c => c.CourseID == CourseID);
+                    course = student.StudyCourses.FirstOrDefault(c => c.CourseID == CourseID);
                 }
                 _rw.ExitReadLock();
                 if (course != null)
                 {
-                    student.Course.Remove(course);
+                    student.StudyCourses.Remove(course);
                     _rw.EnterWriteLock();
                     _dbContext.SaveChanges();
                     _rw.ExitWriteLock();
@@ -129,10 +119,10 @@ namespace CoursesManager.DAL
             try
             {
                 _rw.EnterReadLock();
-                student = _dbContext.Students.Include(s => s.Course).FirstOrDefault(p => p.StudentID == studentID);
+                student = _dbContext.Students.Include(s => s.StudyCourses).FirstOrDefault(p => p.StudentID == studentID);
                 if (student != null)
                 {
-                    course = student.Course.FirstOrDefault(c => c.CourseID == CourseID);
+                    course = student.StudyCourses.FirstOrDefault(c => c.CourseID == CourseID);
                     _rw.ExitReadLock();
 
                 }
@@ -145,7 +135,7 @@ namespace CoursesManager.DAL
                 _rw.ExitReadLock();
                 if (course==null)
                 {
-                    student.Course.Add(course);
+                    student.StudyCourses.Add(course);
                     _rw.EnterWriteLock();
                     _dbContext.SaveChanges();
                     _rw.ExitWriteLock();
@@ -160,35 +150,20 @@ namespace CoursesManager.DAL
             return false;
         }
 
-        public static UserLogin CheckUser(UserLogin user)
-        {
-            try
-            {
-                _rw.EnterReadLock();
-                UserLogin userLogin = _dbContext.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
-                _rw.ExitReadLock();
-                return userLogin;
-            
-            }
-            catch (Exception ex)
-            {
-                Display.Exception(ex);
-                return null;
-            }
-        }
+ 
 
         public static UserLogin ReturnUserLoginByUserID(int userID)
         {
             try
             {
                 _rw.EnterReadLock();
-                UserLogin userLogin = _dbContext.Users.Find(userID);
+                UserLogin user = _dbContext.UserLogins.Find(userID);
                 _rw.ExitReadLock();
-                if (userLogin == null)
+                if (user == null)
                 {
                     Display.Message("Try again");
                 }
-                return userLogin;
+                return user;
 
             }
             catch (Exception ex)

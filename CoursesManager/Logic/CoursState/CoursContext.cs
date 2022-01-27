@@ -64,7 +64,7 @@ namespace CoursesManager.Logic.CourseState
         }
         public void ViewTeacherDetails()
         {
-            Teacher teacher = new();
+            UserDetails teacher = new();
             TeacherAccess.ViewDetails(Course.TeacherID,ref teacher);
             Display.PrintDetails(teacher);        
         }
@@ -98,7 +98,7 @@ namespace CoursesManager.Logic.CourseState
             int unitID;
             var success =int.TryParse(Console.ReadLine(),out unitID);
             if (success)
-            { UnitAccess.RemoveUnit(unitID, Program.Teacher.TeacherID, Course); }
+            { UnitAccess.RemoveUnit(unitID, Course, Program.User); }
             else
             { Display.Message("Not a number. try again."); }
         }
