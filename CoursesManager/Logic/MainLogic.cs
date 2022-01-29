@@ -27,7 +27,7 @@ namespace CoursesManager.Logic
         }
 
 
-        public static void EnterCourse(char user)
+        public static void EnterCourse(TypeOfUser user)
         {
             //parameters
             int CourseID;
@@ -41,13 +41,11 @@ namespace CoursesManager.Logic
             if (course == null)
             { Display.Exception(new NullReferenceException("Can't find course")); return; }
             // Filter bag's
-            if (course.CourseStatus != 'C' && course.CourseStatus != 'O')
-            { Display.Message("The Course status undefined."); return; }
-            if (user != 's' && user != 't' && user != 'd')
+            if (user ==TypeOfUser.Undifind)
             { Display.Message("The user status undefined."); return; }
             //Defind Course state
-            if (user == 's')
-            { if (course.CourseStatus == 'C')
+            if (user == TypeOfUser.Student)
+            { if (course.CourseStatus == false)
                 { Display.Exception(new AuthorizationException("The Course is closed.")); return; }
                 else
                 { CourseContext = new(new StudentState(course, Program.Student), course); }
@@ -55,14 +53,14 @@ namespace CoursesManager.Logic
             else
             { if (Program.Teacher.TeacherID == course.TeacherID)
                 {
-                    if (course.CourseStatus == 'O')
+                    if (course.CourseStatus == true)
                     { CourseContext = new(new ActiveState(course, Program.Teacher), course); }
-                    else if (course.CourseStatus == 'C')
+                    else if (course.CourseStatus == false)
                     { CourseContext = new(new CanceledState(course, Program.Teacher), course); }
                 }
-                else if (user == 't')
+                else if (user == TypeOfUser.Teacher)
                 { Display.Exception(new AuthorizationException("You are not teach this Course. If you want, register as a student.")); return; }
-                else if (course.CourseStatus == 'C')
+                else if (course.CourseStatus == false)
                 { Display.Exception(new AuthorizationException("The Course are closed.")); return; }
                 else
                 { CourseContext = new(new StudentState(course, Program.Student), course); }
@@ -88,9 +86,9 @@ namespace CoursesManager.Logic
             }
         }
 
-        public static void UpdateDetails(char user)
+        public static void UpdateDetails(TypeOfUser user)
         {
-            if (user==default(char))
+            if (user==TypeOfUser.Undifind)
             { Display.Message("The user type undefined. Contact technical support."); return; }
             Display.Message("Enter new details or press Enter.");
             Display.Message("First name:");
@@ -104,19 +102,19 @@ namespace CoursesManager.Logic
             int.TryParse(Console.ReadLine(),out phone);
             switch (user)
             {
-                case ('s'):
+                case (TypeOfUser.Student):
                     Student student = new() { FirstName = firstName?? default(string), LastName = lastName ?? default(string), Email = email ?? default(string), PhoneNumber = phone };
                     var success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
                     var messege = success ? "The details have been updated" : "Error. try again";
                     Display.Message(messege);
                                 break;
-                case ('t'):
+                case (TypeOfUser.Teacher):
                     Teacher teacher = new() { FirstName = firstName ?? default(string), LastName = lastName ?? default(string), Email = email ?? default(string), PhoneNumber = phone };
                      success = TeacherAccess.UpdateDetails(Program.Teacher.TeacherID, teacher);
                      messege = success ? "The details have been updated" : "Error. try again";
                     Display.Message(messege);
                     break;
-                case ('d'):
+                case (TypeOfUser.TeacherAndStudent):
                      student = new() { FirstName = firstName, LastName = lastName, Email = email, PhoneNumber = phone };
                      success = StudentAccess.UpdateDetails(Program.Student.StudentID, student);
                      messege = success ? "The student details have been updated" : "Error. try again";

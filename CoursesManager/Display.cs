@@ -118,13 +118,12 @@ namespace CoursesManager
         }
         public static void MainScreen()
         {
-            char user = default(char);
-            if (Program.Student != null && Program.Teacher != null) { user = 'd'; }
+            TypeOfUser user = TypeOfUser.Undifind;
+            if (Program.Student != null && Program.Teacher != null) { user = TypeOfUser.TeacherAndStudent; }
             else
-
-            if (Program.Student != null) { user = 's'; }
+            if (Program.Student != null) { user = TypeOfUser.Student; }
             else
-            if (Program.Teacher != null) { user = 't'; }
+            if (Program.Teacher != null) { user = TypeOfUser.Teacher; }
             else { Display.Message("User undefined. please update your Details."); }
 
             string choice = "";
@@ -331,7 +330,8 @@ namespace CoursesManager
             {
                 foreach (var item in courses)
                 {
-                    Console.WriteLine($"Course ID: {item.CourseID}\t Course name: {item.CourseName}\t Course status:{item.CourseStatus}");
+                    var status = item.CourseStatus ? "Open" : "Closed";
+                    Console.WriteLine($"Course ID: {item.CourseID}\t Course name: {item.CourseName}\t Course status:{status}");
                 }
             }
             else

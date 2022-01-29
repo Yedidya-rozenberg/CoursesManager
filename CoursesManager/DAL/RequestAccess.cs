@@ -116,7 +116,7 @@ namespace CoursesManager.DAL
                 _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
                 _rw.ExitReadLock();
-                course.CourseStatus = 'C';
+                course.CourseStatus = false;
                 _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 _rw.ExitWriteLock();
@@ -179,7 +179,7 @@ namespace CoursesManager.DAL
                 _rw.EnterReadLock();
                 var course = _dbContext.Courses.Find(request.CourseID);
                 _rw.ExitReadLock();
-                course.CourseStatus = 'O';
+                course.CourseStatus = true;
                 _rw.EnterWriteLock();
                 _dbContext.SaveChanges();
                 _rw.ExitWriteLock();

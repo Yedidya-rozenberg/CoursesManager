@@ -11,7 +11,7 @@ namespace CoursesManager.Models
         [Required]
         public string CourseName { get; set; }
         [Required]
-        public char CourseStatus { get; set; }
+        public bool CourseStatus { get; set; }
 
         [ForeignKey("Teacher")]
         public int TeacherID { get; set; }
@@ -21,4 +21,6 @@ namespace CoursesManager.Models
 
         public ICollection<Unit> Units { get; set; }
     }
+
+
 }
