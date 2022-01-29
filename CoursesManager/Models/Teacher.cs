@@ -8,8 +8,10 @@ namespace CoursesManager.Models
         [Key]
         public int TeacherID { get; set; }
         [Required]
+        [MinLength(2), MaxLength(10)]
         public string FirstName { get; set; }
         [Required]
+        [MinLength(2), MaxLength(10)]
         public string LastName { get; set; }
         [Phone]
         public int PhoneNumber { get; set; }
