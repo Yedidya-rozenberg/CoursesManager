@@ -1,5 +1,6 @@
 ﻿using CoursesManager.DAL;
 using CoursesManager.Logic.CourseState;
+using CoursesManager.Logic.CoursState;
 using CoursesManager.Models;
 using System;
 
@@ -47,7 +48,7 @@ namespace CoursesManager.Logic
             //Defind Course state
             if (user == 's')
             { if (course.CourseStatus == 'C')
-                { Display.Exception(new AccessViolationException("The Course is closed.")); return; }
+                { Display.Exception(new AuthorizationException("The Course is closed.")); return; }
                 else
                 { CourseContext = new(new StudentState(course, Program.Student), course); }
             }
@@ -60,9 +61,9 @@ namespace CoursesManager.Logic
                     { CourseContext = new(new CanceledState(course, Program.Teacher), course); }
                 }
                 else if (user == 't')
-                { Display.Exception(new AccessViolationException("You are not teach this Course. If you want, register as a student.")); return; }
+                { Display.Exception(new AuthorizationException("You are not teach this Course. If you want, register as a student.")); return; }
                 else if (course.CourseStatus == 'C')
-                { Display.Exception(new AccessViolationException("The Course are closed.")); return; }
+                { Display.Exception(new AuthorizationException("The Course are closed.")); return; }
                 else
                 { CourseContext = new(new StudentState(course, Program.Student), course); }
 

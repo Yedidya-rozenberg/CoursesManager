@@ -1,7 +1,9 @@
 ﻿using CoursesManager.DAL;
 using CoursesManager.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoursesManager
 {
@@ -13,14 +15,16 @@ namespace CoursesManager
 
         public static void Main(string[] args)
         {
-            //FullDatabase();
+            FullDatabase();
 
             Display.LoginScreen();
 
         }
-        static void FullDatabase()
+        static async void FullDatabase()
         {
             CoursesDBContext _db = GetDB.GetInstance();
+            if (await _db.Users.AnyAsync()) { return; }
+
             List<Student> students = new()
             {
                 new() { FirstName = "Avi", LastName = "Av", Email = "aaa@Course.memail", PhoneNumber = 051111111, Payment = 11000, UserLogin = new() { UserName = "a1", Password = "a1a1a1" } },
