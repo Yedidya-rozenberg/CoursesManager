@@ -18,13 +18,17 @@ namespace CoursesManager.DAL
             {
                 _rw.EnterReadLock();
                 student = _dbContext.Students.FirstOrDefault(s => s.StudentID == ID);
-                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
                 return false;
             }
+            finally
+            {
+                _rw.ExitReadLock();
+            }
+
             if (student == null)
             {
                 return false;
@@ -43,12 +47,16 @@ namespace CoursesManager.DAL
                _rw.EnterReadLock();
                 student = _dbContext.Students.Find(user.StudentID);
                 teacher = _dbContext.Teachers.Find(user.TeacherID);
-                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
             }
+            finally
+            {
+                _rw.ExitReadLock();
+            }
+
             if(student!= null || teacher != null) { return true; }
             else { return false; }
         }
@@ -61,13 +69,17 @@ namespace CoursesManager.DAL
             {
                 _rw.EnterReadLock();
                 student = _dbContext.Students.Find(StudentID);
-                _rw.ExitReadLock();
             }
             catch (Exception ex)
             {
                 Display.Exception(ex);
                 return result;
             }
+            finally
+            {
+                _rw.ExitReadLock();
+            }
+
             student.FirstName = (updated.FirstName != "") ? updated.FirstName : student.FirstName;
             student.LastName = (updated.LastName != "") ? updated.LastName : student.LastName;
             student.Email = (updated.Email != "") ? updated.Email : student.Email;
