@@ -16,7 +16,6 @@ namespace CoursesManager
         public static void Main(string[] args)
         {
             FullDatabase();
-
             Display.LoginScreen();
 
         }
