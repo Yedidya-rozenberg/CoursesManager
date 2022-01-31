@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace CoursesManager.Models
 {
@@ -11,20 +12,10 @@ namespace CoursesManager.Models
         [MinLength(2), MaxLength(10)]
         public string UserName { get; set; }
         [Required]
-        [MinLength(6)]
-        public string Password { get { return Password; } set 
-            {
-                bool x = false, y = false, z = false;
-                int i;
-                foreach (char c in value)
-                {
-                    if(c.ToString().ToUpper() == c.ToString()) { x = true; }
-                    if(c.ToString().ToLower() == c.ToString()) { y = true; }
-                    var t = int.TryParse(c.ToString(), out i);
-                    if (t) { z = true; }
-                    if (x && y && z) { Password = value; return; }
-                }
-            } }
+        [DataType(DataType.Password)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Passwords must be at least 8 characters and contain at 3 of 4 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
+        public string Password { get; set; }
 
         [ForeignKey("Student")]
         public int? StudentID { get; set; }

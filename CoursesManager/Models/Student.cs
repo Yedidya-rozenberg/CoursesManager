@@ -8,10 +8,12 @@ namespace CoursesManager.Models
         [Key]
         public int StudentID { get; set; }
         [Required]
-        [MinLength(2), MaxLength(10)]
+        [RegularExpression(@"^[a-zA-Z''-'\s]{1,15}$",
+         ErrorMessage = "Characters are not allowed.")]
         public string FirstName { get; set; }
         [Required]
-        [MinLength(2), MaxLength(10)]
+        [RegularExpression(@"^[a-zA-Z''-'\s]{1,15}$",
+         ErrorMessage = "Characters are not allowed.")]
         public string LastName { get; set; }
         [Phone]
         public int PhoneNumber { get; set; }

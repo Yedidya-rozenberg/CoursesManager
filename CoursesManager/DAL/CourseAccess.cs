@@ -78,7 +78,7 @@ namespace CoursesManager.DAL
         {
             try
             {
-                var courses = _dbContext.Courses.Include(c=>c.Teacher);
+                var courses = _dbContext.Courses.Include(c=>c.Teacher).ToList();
                 return courses;
             }
             catch (Exception ex)
