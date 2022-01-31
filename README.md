@@ -11,19 +11,21 @@ The project was Built with Entity Framework Core as the data access technology, 
 Programming	Data Access	Database	GUI
 C#	Entity Framework Core.	SQL Server	Console
 The project loosely implements the Singleton design pattern - All entities in the DAL layer access the database through the same instance, in order to avoid an access conflict. At the same time, the solution was designed through an additional class and not through a ScoolContext class, to allow EF to build the database using the code-first method.
+
 In addition, the project actually states the design pattern state in the course access department - with some options fixed in the CoursContext department, and some varying according to the user's definition - whether he is a teacher or a student, whether he is associated with the course, and whether the course is active, canceled or edited.
+A teacher will be able to switch between active mode, edit mode and canceled mode, and a student will be able to enter student mode. In each modes, the same list of options is presented - but the actions they perform will be different.
 # 3.	Getting Started:
 •	_ Download the code source: _
 Download or clone the Github code from: https://github.com/Yedidya-rozenberg/CoursesManager
 _ Running the Demo: _
-In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it to full demo data to database. Comment the 19 line ( FullDatabase();) , recommend 20 line ( Display.LogginScreen();), and run again.
+In the "Package manager Console" enter "update-database" in order to build the database, if not exist. After this, open "program" file and run it. The program will fill in the database and open the login screen.
 **Sample connection:
 teacher:**
 Username cc
-Password c3c3c3
+Password c3C3c3
 **student:**
 Username c3
-Password c3c3c3
+Password c3C3c3
 If you want, you can find details of other users in the "FullDatabase" method in the program file
 # 4.	Entities, Relations design and logic:
 The project implements EF TPT (Table-per-Type) inheritance model. Table-per-type inheritance uses a separate table in the database to maintain data for non-inherited properties and key properties for each type in the inheritance hierarchy.
@@ -49,8 +51,8 @@ The first table of users includes only a username, password and one-to-one link 
         public Teacher Teacher { get; set; }
     }
     
-There are two types of users - teacher and user. I was debating whether to produce one class that both would inherit from, and in the end I decided to create them as two different classes, in order to make the demo more reliable.
-
+  There are two types of users - teacher and user.
+  
   public class Student //:UserDetiles
   
     {
@@ -197,3 +199,11 @@ The DAL assembly offer a various data retrieving / manipulation methods to be ca
 **Login :**
 Upon logging in, the user is prompted to enter a username and password. During data validation the system retrieves and retains its personal details in the program variable.
 
+# 6. Additional capabilities
+The program demonstrates additional capabilities:
+
+  - Custom Exception - The file and application are in the logic layer.
+  - 
+  - Enum - TypeOfUser - Also in the logic layer.
+  - 
+  - ReaderWriterLockSlim - In the StudentAccess file. EF handles the issue itself, so I put it in mostly as a demo.
